@@ -67,6 +67,14 @@ catch {
   Write-Error "Failed to install Terminal Icons module. Error: $_"
 }
 
+# Install fzf
+try {
+  winget install -e --id junegunn.fzf
+  Write-Host "fzf installed successfully."
+} catch {
+  Write-Error "Failed to install fzf. Error: $_"
+}
+
 # zoxide Install
 try {
   winget install -e --id ajeetdsouza.zoxide
@@ -77,4 +85,4 @@ catch {
 }
 
 # Run the function to install the font
-Install-JetBrainsMonoNerdFont
+Install-JetBrainsMonoNerdFont -FontName "JetBrainsMono" -FontDisplayName "JetBrainsMono NF"
