@@ -266,10 +266,12 @@ function get-help {
             "df"             = "Get information about all volumes on device"
             "disk_clean"     = "Remove temp files in AppData\Local\Temp"
             "htop"           = "Quick shortcut to start btop4win"
+            "lazyg"          = "Quick commit to GitHub"   
             "ll"             = "List only files under current directory"
             "ls"             = "List all files and directories under current directory"
             "myip"           = "Get local network settings and external IP address"
             "net_cls"        = "Total reset of all network settings for current Ethernet adapter"
+            "online"         = "Check seven sites is available from current network"
             "pgrep"          = "Get information for process (e.g., pgrep brave)"
             "pkill"          = "Kill process by name (e.g., pkill brave)"
             "reload-profile" = "Reload PowerShell profile"
@@ -297,7 +299,7 @@ function get-help {
         
         Write-Host "`n$border`n"
     }
-
+Write-Host "Use 'get-help' to display help."
 
 function ll { Get-ChildItem -Path $pwd -File }
 
