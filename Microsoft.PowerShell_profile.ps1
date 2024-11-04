@@ -14,7 +14,7 @@
 #opt-out of telemetry before doing anything, only if PowerShell is run as admin
 if ([bool]([System.Security.Principal.WindowsIdentity]::GetCurrent()).IsSystem) {
         [System.Environment]::SetEnvironmentVariable('POWERSHELL_TELEMETRY_OPTOUT', 'true', [System.EnvironmentVariableTarget]::Machine)
-    }
+}
 
 # Prediction History with list view of predictions
 Set-PSReadLineOption -PredictionSource History
@@ -81,7 +81,7 @@ function Get-BitcoinPrice {
     
         # Output the icon in color followed by the USD rate
         Write-Output "$color$icon$reset $usd_rate"
-    }
+}
     
 # Run the function
 Get-BitcoinPrice 
@@ -89,25 +89,27 @@ Get-BitcoinPrice
 # Update Powershell
 function Update-PowerShell {    
         try {
-            Write-Host "Checking for PowerShell updates..." -ForegroundColor Cyan
-            $updateNeeded = $false
-            $currentVersion = $PSVersionTable.PSVersion.ToString()
-            $gitHubApiUrl = "https://api.github.com/repos/PowerShell/PowerShell/releases/latest"
-            $latestReleaseInfo = Invoke-RestMethod -Uri $gitHubApiUrl
-            $latestVersion = $latestReleaseInfo.tag_name.Trim('v')
-            if ($currentVersion -lt $latestVersion) {
-                $updateNeeded = $true
-            }
+                Write-Host "Checking for PowerShell updates..." -ForegroundColor Cyan
+                $updateNeeded = $false
+                $currentVersion = $PSVersionTable.PSVersion.ToString()
+                $gitHubApiUrl = "https://api.github.com/repos/PowerShell/PowerShell/releases/latest"
+                $latestReleaseInfo = Invoke-RestMethod -Uri $gitHubApiUrl
+                $latestVersion = $latestReleaseInfo.tag_name.Trim('v')
+                if ($currentVersion -lt $latestVersion) {
+                        $updateNeeded = $true
+                }
     
-            if ($updateNeeded) {
-                Write-Host "Updating PowerShell..." -ForegroundColor Yellow
-                winget upgrade "Microsoft.PowerShell" --accept-source-agreements --accept-package-agreements
-                Write-Host "PowerShell has been updated. Please restart your shell to reflect changes" -ForegroundColor Magenta
-            } else {
-                Write-Host "Your PowerShell is up to date." -ForegroundColor Green
-            }
-        } catch {
-            Write-Error "Failed to update PowerShell. Error: $_"
+                if ($updateNeeded) {
+                        Write-Host "Updating PowerShell..." -ForegroundColor Yellow
+                        winget upgrade "Microsoft.PowerShell" --accept-source-agreements --accept-package-agreements
+                        Write-Host "PowerShell has been updated. Please restart your shell to reflect changes" -ForegroundColor Magenta
+                }
+                else {
+                        Write-Host "Your PowerShell is up to date." -ForegroundColor Green
+                }
+        }
+        catch {
+                Write-Error "Failed to update PowerShell. Error: $_"
         }
 }
 Update-PowerShell
@@ -224,60 +226,60 @@ function myip {
         $netConfig = Get-CimInstance Win32_NetworkAdapterConfiguration | Where-Object { $_.IPEnabled -eq $true }
         
         if ($netConfig) {
-            # Get local network information
-            $ip = $netConfig.IPAddress | Where-Object { $_ -match '\d+\.\d+\.\d+\.\d+' }
-            $mask = $netConfig.IPSubnet | Where-Object { $_ -match '\d+\.\d+\.\d+\.\d+' }
-            $gateway = $netConfig.DefaultIPGateway | Select-Object -First 1
-            $dns = $netConfig.DNSServerSearchOrder
-            $domain = $netConfig.DNSDomain
+                # Get local network information
+                $ip = $netConfig.IPAddress | Where-Object { $_ -match '\d+\.\d+\.\d+\.\d+' }
+                $mask = $netConfig.IPSubnet | Where-Object { $_ -match '\d+\.\d+\.\d+\.\d+' }
+                $gateway = $netConfig.DefaultIPGateway | Select-Object -First 1
+                $dns = $netConfig.DNSServerSearchOrder
+                $domain = $netConfig.DNSDomain
     
-            # Get external IP address
-            try {
-                $pub_ip = (Invoke-RestMethod -Uri "https://api.ipify.org?format=json").ip
-            }
-            catch {
-                $pub_ip = "Unable to retrieve"
-            }
+                # Get external IP address
+                try {
+                        $pub_ip = (Invoke-RestMethod -Uri "https://api.ipify.org?format=json").ip
+                }
+                catch {
+                        $pub_ip = "Unable to retrieve"
+                }
     
-            # Display network information
-            Write-Host
-            Write-Host "Local Network Information:" -ForegroundColor DarkCyan
-            Write-Host "IPv4 Address:         $($ip -join ', ')"
-            Write-Host "IPv4 Subnet Mask:     $($mask -join ', ')"
-            Write-Host "IPv4 Default Gateway: $gateway"
-            Write-Host "IPv4 DNS Server(s):   $($dns -join ', ')"
-            Write-Host "Domain:               $domain"
-            Write-Host
-            Write-Host "External Network Information:" -ForegroundColor Red
-            Write-Host "IPv4 Address:         $pub_ip"
-            Write-Host
+                # Display network information
+                Write-Host
+                Write-Host "Local Network Information:" -ForegroundColor DarkCyan
+                Write-Host "IPv4 Address:         $($ip -join ', ')"
+                Write-Host "IPv4 Subnet Mask:     $($mask -join ', ')"
+                Write-Host "IPv4 Default Gateway: $gateway"
+                Write-Host "IPv4 DNS Server(s):   $($dns -join ', ')"
+                Write-Host "Domain:               $domain"
+                Write-Host
+                Write-Host "External Network Information:" -ForegroundColor Red
+                Write-Host "IPv4 Address:         $pub_ip"
+                Write-Host
         }
         else {
-            Write-Host "No network adapter configuration found." -ForegroundColor Yellow
+                Write-Host "No network adapter configuration found." -ForegroundColor Yellow
         }
-    }
+}
     
     
 
 function get-help {
         $border = [string]::new([char]0x2501, 120)
         $commands = @{
-            "admin"          = "Start a new elevated process or command with admin rights"
-            "df"             = "Get information about all volumes on device"
-            "disk_clean"     = "Remove temp files in AppData\Local\Temp"
-            "htop"           = "Quick shortcut to start btop4win"
-            "lazyg"          = "Quick commit to GitHub"   
-            "ll"             = "List only files under current directory"
-            "ls"             = "List all files and directories under current directory"
-            "myip"           = "Get local network settings and external IP address"
-            "net_cls"        = "Total reset of all network settings for current Ethernet adapter"
-            "online"         = "Check seven sites is available from current network"
-            "pgrep"          = "Get information for process (e.g., pgrep brave)"
-            "pkill"          = "Kill process by name (e.g., pkill brave)"
-            "reload-profile" = "Reload PowerShell profile"
-            "rdcman"         = "Quick shortcut to start Remote Desktop Connection Manager"
-            "touch"          = "Create a new file (e.g., touch example.txt)"
-            "uptime"         = "Get device uptime"
+                "admin"          = "Start a new elevated process or command with admin rights"
+                "df"             = "Get information about all volumes on device"
+                "disk_clean"     = "Remove temp files in AppData\Local\Temp"
+                "htop"           = "Quick shortcut to start btop4win"
+                "lazyg"          = "Quick commit to GitHub"   
+                "ll"             = "List only files under current directory"
+                "ls"             = "List all files and directories under current directory"
+                "myip"           = "Get local network settings and external IP address"
+                "net_cls"        = "Total reset of all network settings for current Ethernet adapter"
+                "online"         = "Check seven sites is available from current network"
+                "pgrep"          = "Get information for process (e.g., pgrep brave)"
+                "pkill"          = "Kill process by name (e.g., pkill brave)"
+                "reload-profile" = "Reload PowerShell profile"
+                "rdcman"         = "Quick shortcut to start Remote Desktop Connection Manager"
+                "touch"          = "Create a new file (e.g., touch example.txt)"
+                "uptime"         = "Get device uptime"
         }
         
         $maxCommandLength = ($commands.Keys | Measure-Object -Maximum Length).Maximum
@@ -289,17 +291,18 @@ function get-help {
         Write-Host
     
         foreach ($command in $commands.Keys | Sort-Object) {
-            $paddedCommand = $command.PadRight($maxCommandLength + $leftPadding)
-            $boldCommand = "$([char]27)[1m$paddedCommand$([char]27)[0m"  # ANSI escape code for bold
-            $description = $commands[$command]
+                $paddedCommand = $command.PadRight($maxCommandLength + $leftPadding)
+                $boldCommand = "$([char]27)[1m$paddedCommand$([char]27)[0m"  # ANSI escape code for bold
+                $description = $commands[$command]
             
-            Write-Host ("  {0}" -f $boldCommand) -NoNewline -ForegroundColor Yellow
-            Write-Host (": {0}" -f $description)
+                Write-Host ("  {0}" -f $boldCommand) -NoNewline -ForegroundColor Yellow
+                Write-Host (": {0}" -f $description)
         }
         
         Write-Host "`n$border`n"
-    }
-Write-Host "Use 'get-help' to display help."
+}
+
+Write-Host "Use `e[38;2;247;147;26m$([char]27)[1mget-help$([char]27)[0m`e[0m to display help."
 
 function ll { Get-ChildItem -Path $pwd -File }
 
