@@ -1,3 +1,4 @@
+[![Install](https://github.com/tonytech83/powershell-profile/actions/workflows/main.yml/badge.svg)](https://github.com/tonytech83/powershell-profile/actions/workflows/main.yml)
 # PowerShell Profile
 
 Feels almost as good as a Linux terminal.
