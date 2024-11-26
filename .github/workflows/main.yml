@@ -1,0 +1,26 @@
+name: Install
+
+on:
+    push:
+        branches: main
+    workflow_dispatch:
+
+jobs:
+    install:
+        runs-on: windows-latest
+
+        steps:
+            - name: Checkout the repo
+              uses: actions/checkout@v4
+
+            - name: Install dependencies
+              shell: pwsh
+              run: |
+                ./setup.ps1
+
+            - name: Copy PowerShell profile
+              shell: pwsh
+              run: |
+                ./setprofile.ps1
+
+
