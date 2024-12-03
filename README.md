@@ -22,4 +22,4 @@ git clone https://github.com/tonytech83/powershell-profile.git
 
 ### 3. Execute `setprofile.ps1`. This will copy `Microsoft.PowerShell_profile.ps1` into `C:\Users\<username>\Documents\PowerShell`
 
-### 4.  Copy and paste `my_theme.omp.json` into `C:\Users\<username>\AppData\Local\Programs\oh-my-posh\themes`
+### 4.  Copy and paste `my_theme.omp.json` into `C:\Program Files (x86)\oh-my-posh\themes`
