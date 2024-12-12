@@ -10,14 +10,15 @@
         "red": "#ff5555",
         "new_red": "#bd3220",
         "orange": "#d08770",
-        "new_orange": "#FF9248"
+        "new_orange": "#FF9248",
+        "white": "#ffffff"
   },
   "blocks": [
     {
       "alignment": "left",
       "segments": [
         {
-          "foreground": "p:green",
+          "foreground": "p:white",
           "style": "plain",
           "template": "{{.Icon}} ",
           "type": "os"
