@@ -20,6 +20,12 @@ git clone https://github.com/tonytech83/powershell-profile.git
   - fzf
   - zoxide
 
-### 3. Execute `setprofile.ps1`. This will copy `Microsoft.PowerShell_profile.ps1` into `C:\Users\<username>\Documents\PowerShell`
+### 3. Execute `setprofile.ps1` to setup profile.
+```powershell
+.\setprofile.ps1
+```
 
-### 4.  Copy and paste `my_theme.omp.json` into `C:\Program Files (x86)\oh-my-posh\themes`
+### 4.  If you want to use my theme `my_theme.omp.json`.
+```powershell
+cp .\my_theme.omp.json 'C:\Program Files (x86)\oh-my-posh\themes\'
+```
