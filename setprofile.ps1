@@ -5,11 +5,7 @@ $profilePath = Split-Path -Path $PROFILE
 if (-not (Test-Path $profilePath)) {
   New-Item -ItemType Directory -Path $profilePath -Force
   Write-Host "Created profile directory: $profilePath"
-} catch {
-  Write-Error "Failed to create folder: $_"
-  exit 1
 }
-
 
 # Copy profile with confirmation and backup
 try {
