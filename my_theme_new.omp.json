@@ -26,7 +26,13 @@
         },
         {
           "style": "plain",
-          "template": "<p:orange>[</><p:lavender>{{ .UserName }}</><p:orange>]</>",
+          "template": "[ ",
+          "foreground": "p:new_orange",
+          "type": "text"
+        },
+        {
+          "style": "plain",
+          "template": "<p:lavender>{{ .UserName }}</>",
           "type": "session"
         },
         {
@@ -34,14 +40,20 @@
             "cache_duration": "none"
           },
           "template": " {{.Icon}} ",
-          "foreground": "p:white",
+          "foreground": "p:new_orange",
           "type": "os",
           "style": "plain"
         },
         {
           "style": "plain",
-          "template": "<p:orange>[</><p:lavender>{{ .HostName }}</><p:orange>]</>",
+          "template": "<p:lavender>{{ .HostName }}</>",
           "type": "session"
+        },
+        {
+          "style": "plain",
+          "template": " ]",
+          "foreground": "p:new_orange",
+          "type": "text"
         },
         {
           "properties": {
