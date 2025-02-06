@@ -20,7 +20,7 @@
       "segments": [
         {
           "style": "plain",
-          "template": "\u256d\u2500",
+          "template": "┌\u2500",
           "foreground": "p:new_orange",
           "type": "text"
         },
@@ -186,7 +186,7 @@
           "properties": {
             "cache_duration": "none"
           },
-          "template": "\u2570\u2500 ",
+          "template": "└\u2500 ",
           "foreground": "p:new_orange",
           "type": "text",
           "style": "plain"
