@@ -19,11 +19,31 @@
       "alignment": "left",
       "segments": [
         {
+          "style": "plain",
+          "template": "\u256d\u2500",
+          "foreground": "p:new_orange",
+          "type": "text"
+        },
+        // venv
+        {
           "type": "python",
           "style": "plain",
-          "foreground": "p:blue",
-          "template": "{{ if .Venv }}( venv){{ end }} "
+          "foreground": "p:new_orange",
+          "template": "{{ if .Venv }}[ {{ end }}"
         },
+        {
+          "type": "python",
+          "style": "plain",
+          "foreground": "p:green",
+          "template": "{{ if .Venv }}venv{{ end }}"
+        },
+        {
+          "type": "python",
+          "style": "plain",
+          "foreground": "p:new_orange",
+          "template": "{{ if .Venv }} ]{{ end }}"
+        },
+        // user and hostname
         {
           "style": "plain",
           "template": "[ ",
@@ -55,6 +75,7 @@
           "foreground": "p:new_orange",
           "type": "text"
         },
+        // path
         {
           "properties": {
             "cache_duration": "none",
@@ -67,6 +88,7 @@
           "type": "path",
           "style": "plain"
         },
+        // git
         {
           "properties": {
             "cache_duration": "none",
@@ -77,6 +99,7 @@
           "type": "git",
           "style": "plain"
         },
+        // node
         {
           "properties": {
             "cache_duration": "none",
@@ -87,6 +110,7 @@
           "type": "node",
           "style": "plain"
         },
+        // go
         {
           "foreground": "#8ED1F7",
           "properties": {
@@ -96,6 +120,7 @@
           "template": "\ue626 {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
           "type": "go"
         },
+        // julia
         {
           "foreground": "#4063D8",
           "properties": {
@@ -105,6 +130,7 @@
           "template": "\ue624 {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
           "type": "julia"
         },
+        // python
         {
           "foreground": "p:blue",
           "properties": {
@@ -115,6 +141,7 @@
           "template": "\ue235 {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
           "type": "python"
         },
+        // ruby
         {
           "properties": {
             "display_mode": "files",
@@ -124,6 +151,7 @@
           "template": "\ue791 {{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
           "type": "ruby"
         },
+        // azfunc
         {
           "foreground": "#FEAC19",
           "properties": {
@@ -134,6 +162,7 @@
           "template": "\uf0e7{{ if .Error }}{{ .Error }}{{ else }}{{ .Full }}{{ end }} ",
           "type": "azfunc"
         },
+        // aws
         {
           "background_templates": [
             "{{if contains \"default\" .Profile}}#FFA400{{end}}",
@@ -157,7 +186,7 @@
           "properties": {
             "cache_duration": "none"
           },
-          "template": "\ue285",
+          "template": "\u2570\u2500 ",
           "foreground": "p:new_orange",
           "type": "text",
           "style": "plain"
