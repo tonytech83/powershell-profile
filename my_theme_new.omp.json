@@ -24,26 +24,11 @@
           "foreground": "p:new_orange",
           "type": "text"
         },
-        // venv
         {
           "type": "python",
           "style": "plain",
-          "foreground": "p:new_orange",
-          "template": "{{ if .Venv }}[ {{ end }}"
+          "template": "{{ if .Venv }}<b><p:new_orange>[ </><p:white><i>venv</i></><p:new_orange> ]</></b>{{ end }}"
         },
-        {
-          "type": "python",
-          "style": "plain",
-          "foreground": "p:green",
-          "template": "{{ if .Venv }}venv{{ end }}"
-        },
-        {
-          "type": "python",
-          "style": "plain",
-          "foreground": "p:new_orange",
-          "template": "{{ if .Venv }} ]{{ end }}"
-        },
-        // user and hostname
         {
           "style": "plain",
           "template": "<b><p:new_orange>[ </><i><p:green>{{ .UserName }}</></i></b>",
