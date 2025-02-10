@@ -46,13 +46,7 @@
         // user and hostname
         {
           "style": "plain",
-          "template": "[ ",
-          "foreground": "p:new_orange",
-          "type": "text"
-        },
-        {
-          "style": "plain",
-          "template": "<p:lavender>{{ .UserName }}</>",
+          "template": "<b><p:new_orange>[ </><i><p:green>{{ .UserName }}</></i></b>",
           "type": "session"
         },
         {
@@ -66,14 +60,8 @@
         },
         {
           "style": "plain",
-          "template": "<p:lavender>{{ .HostName }}</>",
+          "template": "<b><i><p:lavender>{{ .HostName }}</></i><p:new_orange> ]</></b>",
           "type": "session"
-        },
-        {
-          "style": "plain",
-          "template": " ]",
-          "foreground": "p:new_orange",
-          "type": "text"
         },
         // path
         {
