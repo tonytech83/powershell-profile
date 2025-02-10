@@ -15,13 +15,13 @@
   },
   "blocks": [
     {
-      "type": "prompt",
       "alignment": "left",
+      "newline": true,
       "segments": [
         {
           "style": "plain",
           "template": "┌\u2500",
-          "foreground": "p:new_orange",
+          "foreground": "p:gray",
           "type": "text"
         },
         {
@@ -29,34 +29,15 @@
           "style": "plain",
           "template": "{{ if .Venv }}<b><p:new_orange>[ </><p:white><i>venv</i></><p:new_orange> ]</></b>{{ end }}"
         },
-        {
-          "style": "plain",
-          "template": "<b><p:new_orange>[ </><i><p:green>{{ .UserName }}</></i></b>",
-          "type": "session"
-        },
-        {
-          "properties": {
-            "cache_duration": "none"
-          },
-          "template": " {{.Icon}} ",
-          "foreground": "p:new_orange",
-          "type": "os",
-          "style": "plain"
-        },
-        {
-          "style": "plain",
-          "template": "<b><i><p:lavender>{{ .HostName }}</></i><p:new_orange> ]</></b>",
-          "type": "session"
-        },
         // path
         {
           "properties": {
             "cache_duration": "none",
             "folder_icon": "..\ue5fe..",
-            "home_icon": "",
-            "style": "agnoster_short"
+            "home_icon": "~",
+            "style": "full"
           },
-          "template": "[ {{ .Path }} ] ",
+          "template": "<b>[ </b>{{ .Path }} <b>]</b> ",
           "foreground": "p:gray",
           "type": "path",
           "style": "plain"
@@ -149,25 +130,55 @@
           "template": "\ue7ad {{ .Profile }}{{ if .Region }}@{{ .Region }}{{ end }} ",
           "type": "aws"
         }
-      ]
+      ],
+      "type": "prompt"
     },
     {
-      "type": "prompt",
+      "alignment": "right",
+      "segments": [
+        {
+          "style": "plain",
+          "template": "<b><p:new_orange>[ </><i><p:green>{{ .UserName }}</></i></b>",
+          "type": "session"
+        },
+        {
+          "properties": {
+            "cache_duration": "none"
+          },
+          "template": " {{.Icon}} ",
+          "foreground": "p:new_orange",
+          "type": "os",
+          "style": "plain"
+        },
+        {
+          "style": "plain",
+          "template": "<b><i><p:lavender>{{ .HostName }}</></i><p:new_orange> ]</></b>",
+          "type": "session"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
       "alignment": "left",
       "segments": [
         {
           "properties": {
             "cache_duration": "none"
           },
-          "template": "└\u2500 ",
-          "foreground": "p:new_orange",
+          "template": "<p:gray>└\u2500<p:new_orange> </>",
           "type": "text",
           "style": "plain"
         }
       ],
-      "newline": true
+      "type": "prompt"
     }
   ],
+  "console_title_template": "{{.UserName}} in {{ .Folder }}",
+  "transient_prompt": {
+    "background": "transparent",
+    "foreground": "p:new_orange",
+    "template": "{{ .Shell }}> "
+  },
   "version": 3,
   "final_space": true
 }

@@ -82,7 +82,7 @@ function Get-BitcoinPrice {
         # Output the icon in color followed by the USD rate
         Write-Output "$color$icon$reset $usd_rate"
 }
-    
+
 # Run the function
 Get-BitcoinPrice 
 
@@ -378,13 +378,7 @@ Set-PSReadLineOption -Colors @{
 
 
 ## Final Line to set prompt
-# oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\tiwahu.omp.json" | Invoke-Expression # <--
-# oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\my-star.omp.json" | Invoke-Expression
-# oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\my_illusi0n.omp.json" | Invoke-Expression # good one
-# oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\my_di4am0nd.omp.json" | Invoke-Expression
-
 oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\my_theme.omp.json" | Invoke-Expression
-
 
 # Add icons
 Import-Module -Name Terminal-Icons
