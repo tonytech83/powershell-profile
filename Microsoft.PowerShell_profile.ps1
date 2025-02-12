@@ -1,8 +1,8 @@
 #################################################################################################################################
 ###                                                                                                                           ###
-###                                     _______                       _______               __                                ###                                          
-###                                    |_     _|.-----..-----..--.--.|_     _|.-----..----.|  |--.                            ###  
-###                                      |   |  |  _  ||     ||  |  |  |   |  |  -__||  __||     |                            ###  
+###                                     _______                       _______               __                                ###
+###                                    |_     _|.-----..-----..--.--.|_     _|.-----..----.|  |--.                            ###
+###                                      |   |  |  _  ||     ||  |  |  |   |  |  -__||  __||     |                            ###
 ###                                      |___|  |_____||__|__||___  |  |___|  |_____||____||__|__|                            ###
 ###                                                           |_____|                                                         ###
 ###                                                                                                                           ###
@@ -26,7 +26,7 @@ $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
 $principal = New-Object Security.Principal.WindowsPrincipal $identity
 $isAdmin = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
-# Compute file hashes - useful for checking successful downloads 
+# Compute file hashes - useful for checking successful downloads
 function md5 { Get-FileHash -Algorithm MD5 $args }
 function sha1 { Get-FileHash -Algorithm SHA1 $args }
 function sha256 { Get-FileHash -Algorithm SHA256 $args }
@@ -45,12 +45,12 @@ if (Test-Path "$env:USERPROFILE\Work Folders") {
         function Work: { Set-Location Work: }
 }
 
-# Set up command prompt and window title. Use UNIX-style convention for identifying 
+# Set up command prompt and window title. Use UNIX-style convention for identifying
 # whether user is elevated (root) or not. Window title shows current version of PowerShell
 # and appends [ADMIN] if appropriate for easy taskbar identification
-function prompt { 
+function prompt {
         if ($isAdmin) {
-                "[" + (Get-Location) + "] # " 
+                "[" + (Get-Location) + "] # "
         }
         else {
                 "[" + (Get-Location) + "] $ "
@@ -66,10 +66,10 @@ if ($isAdmin) {
 function Get-BitcoinPrice {
         # Fetch JSON data from the Binance API
         $json_data = Invoke-RestMethod -Uri "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT"
-    
+
         # Extract and format the price
         $usd_rate = [math]::Round($json_data.price, 2).ToString("N2")
-    
+
         # Define the icon
         $icon = ""
 
@@ -78,16 +78,16 @@ function Get-BitcoinPrice {
 
         # Reset color code to default
         $reset = "`e[0m"
-    
+
         # Output the icon in color followed by the USD rate
         Write-Output "$color$icon$reset $usd_rate USD"
 }
 
 # Run the function
-Get-BitcoinPrice 
+Get-BitcoinPrice
 
 # Update Powershell
-function Update-PowerShell {    
+function Update-PowerShell {
         try {
                 Write-Host "Checking for PowerShell updates..." -ForegroundColor Cyan
                 $updateNeeded = $false
@@ -98,7 +98,7 @@ function Update-PowerShell {
                 if ($currentVersion -lt $latestVersion) {
                         $updateNeeded = $true
                 }
-    
+
                 if ($updateNeeded) {
                         Write-Host "Updating PowerShell..." -ForegroundColor Yellow
                         winget upgrade "Microsoft.PowerShell" --accept-source-agreements --accept-package-agreements
@@ -124,11 +124,11 @@ function dirs {
         }
 }
 
-# Simple function to start a new elevated process. If arguments are supplied then 
+# Simple function to start a new elevated process. If arguments are supplied then
 # a single command is started with admin rights; if not then a new admin instance
 # of PowerShell is started.
 function admin {
-        if ($args.Count -gt 0) {   
+        if ($args.Count -gt 0) {
                 $argList = "& '" + $args + "'"
                 Start-Process "$psHome\pwsh.exe" -Verb runAs -ArgumentList $argList
         }
@@ -138,7 +138,7 @@ function admin {
 }
 
 # Set UNIX-like aliases for the admin command, so sudo <command> will run the command
-# with elevated rights. 
+# with elevated rights.
 Set-Alias -Name su -Value admin
 Set-Alias -Name sudo -Value admin
 Set-Alias -Name clr -Value clear
@@ -153,14 +153,14 @@ function Edit-Profile {
         }
 }
 
-# We don't need these any more; they were just temporary variables to get to $isAdmin. 
-# Delete them to prevent cluttering up the user profile. 
+# We don't need these any more; they were just temporary variables to get to $isAdmin.
+# Delete them to prevent cluttering up the user profile.
 Remove-Variable identity
 Remove-Variable principal
 
 # Quick shortcut to start Remoute Desktop Connection Manager
 function rdcman {
-        C:\Tools\RDCMan\RDCMan.exe       
+        C:\Tools\RDCMan\RDCMan.exe
 }
 
 # Quick shortcut to start btop4win
@@ -168,7 +168,7 @@ function htop {
         C:\Tools\btop4win\btop4win.exe
 }
 
-function disk_clean {              
+function disk_clean {
         #Remove the temp files in AppData\Local\Temp
         Remove-Item -Path $env:TEMP\* -Recurse -Force -ErrorAction SilentlyContinue
 
@@ -176,7 +176,7 @@ function disk_clean {
         cleanmgr /sagerun:1 /VeryLowDisk /AUTOCLEAN | Out-Null
 }
 function net_cls {
-        ipconfig /release & ipconfig /renew & ipconfig /flushdns        
+        ipconfig /release & ipconfig /renew & ipconfig /flushdns
 }
 
 # Check the status of some familiar websites
@@ -224,7 +224,7 @@ function online {
 function myip {
         # Get network adapter configuration
         $netConfig = Get-CimInstance Win32_NetworkAdapterConfiguration | Where-Object { $_.IPEnabled -eq $true }
-        
+
         if ($netConfig) {
                 # Get local network information
                 $ip = $netConfig.IPAddress | Where-Object { $_ -match '\d+\.\d+\.\d+\.\d+' }
@@ -232,7 +232,7 @@ function myip {
                 $gateway = $netConfig.DefaultIPGateway | Select-Object -First 1
                 $dns = $netConfig.DNSServerSearchOrder
                 $domain = $netConfig.DNSDomain
-    
+
                 # Get external IP address
                 try {
                         $pub_ip = (Invoke-RestMethod -Uri "https://api.ipify.org?format=json").ip
@@ -240,7 +240,7 @@ function myip {
                 catch {
                         $pub_ip = "Unable to retrieve"
                 }
-    
+
                 # Display network information
                 Write-Host
                 Write-Host "Local Network Information:" -ForegroundColor DarkCyan
@@ -258,8 +258,6 @@ function myip {
                 Write-Host "No network adapter configuration found." -ForegroundColor Yellow
         }
 }
-    
-    
 
 function get-help {
         $border = [string]::new([char]0x2501, 120)
@@ -281,24 +279,24 @@ function get-help {
                 "touch"          = "Create a new file (e.g., touch example.txt)"
                 "uptime"         = "Get device uptime"
         }
-        
+
         $maxCommandLength = ($commands.Keys | Measure-Object -Maximum Length).Maximum
         $leftPadding = 4
         $rightPadding = 2
-        
+
         Write-Host "`n$border`n"
         Write-Host "Available Commands:" -ForegroundColor Cyan
         Write-Host
-    
+
         foreach ($command in $commands.Keys | Sort-Object) {
                 $paddedCommand = $command.PadRight($maxCommandLength + $leftPadding)
                 $boldCommand = "$([char]27)[1m$paddedCommand$([char]27)[0m"  # ANSI escape code for bold
                 $description = $commands[$command]
-            
+
                 Write-Host ("  {0}" -f $boldCommand) -NoNewline -ForegroundColor Yellow
                 Write-Host (": {0}" -f $description)
         }
-        
+
         Write-Host "`n$border`n"
 }
 
@@ -385,5 +383,3 @@ Import-Module -Name Terminal-Icons
 
 # Added `z` instead `cd`
 Invoke-Expression (& { (zoxide init powershell | Out-String) })
-
-
