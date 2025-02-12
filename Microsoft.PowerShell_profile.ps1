@@ -64,11 +64,11 @@ if ($isAdmin) {
 
 # Bitcoin price
 function Get-BitcoinPrice {
-        # Fetch JSON data from the Coindesk API
-        $json_data = Invoke-RestMethod -Uri "https://api.coindesk.com/v1/bpi/currentprice.json"
+        # Fetch JSON data from the Binance API
+        $json_data = Invoke-RestMethod -Uri "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT"
     
-        # Extract the USD rate
-        $usd_rate = $json_data.bpi.USD.rate
+        # Extract and format the price
+        $usd_rate = [math]::Round($json_data.price, 2).ToString("N2")
     
         # Define the icon
         $icon = ""
@@ -80,7 +80,7 @@ function Get-BitcoinPrice {
         $reset = "`e[0m"
     
         # Output the icon in color followed by the USD rate
-        Write-Output "$color$icon$reset $usd_rate"
+        Write-Output "$color$icon$reset $usd_rate USD"
 }
 
 # Run the function
