@@ -29,3 +29,4 @@ git clone https://github.com/tonytech83/powershell-profile.git
 ```powershell
 cp .\my_theme.omp.json 'C:\Program Files (x86)\oh-my-posh\themes\'
 ```
+
