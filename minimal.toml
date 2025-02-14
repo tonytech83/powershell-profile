@@ -6,7 +6,7 @@ final_space = true
 black = "#2E3440"
 green = "#A3BE8C"
 white = "#D8DEE9"
-gray = "#373d49"
+gray = "#84868b"
 blue = "#81A1C1"
 red = "#BF616A"
 yellow = "#EBCB8B"
@@ -30,8 +30,8 @@ darkblue = "#7292b2"
   newline = true
 
   [[blocks.segments]]
-    template = '{{ .Path }}'
-    foreground = 'p:darkblue'
+    template = '[ {{ .Path }} ]'
+    foreground = 'p:gray'
     background = 'transparent'
     type = 'path'
     style = 'plain'
@@ -41,8 +41,8 @@ darkblue = "#7292b2"
       style = 'full'
 
   [[blocks.segments]]
-    template = ' {{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{ end }} <p:purple>{{ if gt .Behind 0 }}{{ end }}{{ if gt .Ahead 0 }}{{ end }}</>'
-    foreground = 'p:grey'
+    template = '  {{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{else }}≡{{ end }} <p:purple>{{ if gt .Behind 0 }}{{ end }}{{ if gt .Ahead 0 }}{{ end }}</>'
+    foreground = 'p:red'
     background = 'transparent'
     type = 'git'
     style = 'plain'
