@@ -15,14 +15,14 @@ orange = "#f7931a"
 darkblue = "#7292b2"
 
 [secondary_prompt]
-  template = '❯❯ '
+  template = '❯ '
   foreground = 'p:green'
   background = 'transparent'
 
 [transient_prompt]
-  template = '❯ '
+  template = ' '
   background = 'transparent'
-  foreground_templates = ['{{if gt .Code 0}}p:red{{end}}', '{{if eq .Code 0}}p:orange{{end}}']
+  foreground_templates = ['{{if gt .Code 0}}p:red{{end}}', '{{if eq .Code 0}}p:green{{end}}']
 
 [[blocks]]
   type = 'prompt'
@@ -74,11 +74,11 @@ darkblue = "#7292b2"
   newline = true
 
   [[blocks.segments]]
-    template = '❯'
+    template = ' '
     background = 'transparent'
     type = 'text'
     style = 'plain'
-    foreground_templates = ['{{if gt .Code 0}}p:red{{end}}', '{{if eq .Code 0}}p:orange{{end}}']
+    foreground_templates = ['{{if gt .Code 0}}p:red{{end}}', '{{if eq .Code 0}}p:green{{end}}']
 
     [blocks.segments.properties]
       cache_duration = 'none'
