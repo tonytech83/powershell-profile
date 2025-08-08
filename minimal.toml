@@ -35,6 +35,22 @@ darkblue = "#7292b2"
   newline = true
 
   ############################################################################
+  ##### Python
+  ############################################################################
+  # If venv is active the icon is green else gray
+   [[blocks.segments]]
+      type = "python"
+      style = "plain"
+      template = " "
+      foreground = "p:gray"
+      background = "transparent"
+      foreground_templates = [ "{{ if .Venv }}p:green{{ end }}" ]
+
+    [blocks.segments.properties]
+      display_mode = "files"
+      fetch_virtual_env = true
+
+  ############################################################################
   ##### Username
   ############################################################################
   # If venv is active the icon is green else gray
