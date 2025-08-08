@@ -29,6 +29,21 @@ darkblue = "#7292b2"
   alignment = 'left'
   newline = true
 
+  # Python
+  [[blocks.segments]]
+    template = '{{ if .Venv }}{{ end }} '
+    #template = ' {{ if .Error }}{{ .Error }}{{ else }}{{ .Venv }}{{ end }} '
+    #template = '{{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }} '
+    foreground = 'p:blue'
+    background = 'transparent'
+    type = 'python'
+    style = 'plain'
+
+    [blocks.segments.properties]
+      display_mode = "files"
+      fetch_virtual_env = true
+
+  # Path
   [[blocks.segments]]
     template = '[ {{ .Path }} ]'
     foreground = 'p:gray'
@@ -40,6 +55,7 @@ darkblue = "#7292b2"
       cache_duration = 'none'
       style = 'full'
 
+  # Git
   [[blocks.segments]]
     template = '  {{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{else }}≡{{ end }} <p:purple>{{ if gt .Behind 0 }}{{ end }}{{ if gt .Ahead 0 }}{{ end }}</>'
     foreground = 'p:red'
