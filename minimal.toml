@@ -1,4 +1,4 @@
-console_title_template = '{{ .Shell }} in {{ .Folder }}'
+console_title_template = "{{ .Shell }} in {{ .Folder }}"
 version = 3
 final_space = true
 
@@ -15,86 +15,133 @@ orange = "#f7931a"
 darkblue = "#7292b2"
 
 [secondary_prompt]
-  template = '❯ '
-  foreground = 'p:green'
-  background = 'transparent'
+  # template = "❯ "
+  template = ">> "
+  foreground = "p:green"
+  background = "transparent"
 
 [transient_prompt]
-  template = ' '
-  background = 'transparent'
-  foreground_templates = ['{{if gt .Code 0}}p:red{{end}}', '{{if eq .Code 0}}p:green{{end}}']
+  # template = " "
+  template ="$ "
+  background = "transparent"
+  foreground_templates = [
+    "{{if gt .Code 0}}p:red{{end}}",
+    "{{if eq .Code 0}}p:green{{end}}"
+  ]
 
 [[blocks]]
-  type = 'prompt'
-  alignment = 'left'
+  type = "prompt"
+  alignment = "left"
   newline = true
 
-  # Python
+  ############################################################################
+  ##### Username
+  ############################################################################
+  # If venv is active the icon is green else gray
   [[blocks.segments]]
-    template = '{{ if .Venv }}{{ end }} '
-    #template = ' {{ if .Error }}{{ .Error }}{{ else }}{{ .Venv }}{{ end }} '
-    #template = '{{ if .Error }}{{ .Error }}{{ else }}{{ if .Venv }}{{ .Venv }} {{ end }}{{ .Full }}{{ end }} '
-    foreground = 'p:blue'
-    background = 'transparent'
-    type = 'python'
-    style = 'plain'
+    type = "session"
+    style = "plain"
+    template = "\u001b[1m{{ .UserName }}\u001b[22m"
+    foreground = "p:orange"
+    background = "transparent"
 
     [blocks.segments.properties]
       display_mode = "files"
       fetch_virtual_env = true
 
-  # Path
   [[blocks.segments]]
-    template = '[ {{ .Path }} ]'
-    foreground = 'p:gray'
-    background = 'transparent'
-    type = 'path'
-    style = 'plain'
+  type = "text"
+  style = "plain"
+  template = "\u001b[1m at \u001b[22m"
+  foreground = "p:white"
+  background = "transparent"
+
+  [[blocks.segments]]
+  type = "session"
+  style = "plain"
+  template = "\u001b[1m{{ .HostName }}\u001b[22m"
+  foreground = "p:blue"
+  background = "transparent"
 
     [blocks.segments.properties]
-      cache_duration = 'none'
-      style = 'full'
+      display_mode = "files"
+      fetch_virtual_env = true
 
-  # Git
   [[blocks.segments]]
-    template = '  {{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{else }}≡{{ end }} <p:purple>{{ if gt .Behind 0 }}{{ end }}{{ if gt .Ahead 0 }}{{ end }}</>'
-    foreground = 'p:red'
-    background = 'transparent'
-    type = 'git'
-    style = 'plain'
+    type = "text"
+    style = "plain"
+    template = "\u001b[1m in \u001b[22m"
+    foreground = "p:white"
+    background = "transparent"
+
+  ############################################################################
+  ##### Path
+  ############################################################################
+  [[blocks.segments]]
+    type = "path"
+    style = "powerline"
+    template = "\u001b[1m{{ .Folder }}\u001b[22m"
+    foreground = "p:green"
+    background = "transparent"
 
     [blocks.segments.properties]
-      branch_icon = ''
-      cache_duration = 'none'
-      commit_icon = '@'
+      cache_duration = "none"
+      style = "full"
+
+  ############################################################################
+  ##### Git
+  ############################################################################
+  [[blocks.segments]]
+    type = "git"
+    style = "powerline"
+    template = "  {{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{else }}≡{{ end }} <p:purple>{{ if gt .Behind 0 }}{{ end }}{{ if gt .Ahead 0 }}{{ end }}</>"
+    foreground = "p:red"
+    background = "transparent"
+
+    [blocks.segments.properties]
+      branch_icon = ""
+      cache_duration = "none"
+      commit_icon = "@"
       fetch_status = true
 
+############################################################################
+##### Execution time of command 
+############################################################################
 [[blocks]]
-  type = 'rprompt'
-  overflow = 'hidden'
+  type = "rprompt"
+  overflow = "hidden"
 
   [[blocks.segments]]
-    template = '{{ .FormattedMs }}'
-    foreground = 'p:yellow'
-    background = 'transparent'
-    type = 'executiontime'
-    style = 'plain'
+    template = "{{ .FormattedMs }}"
+    foreground = "p:yellow"
+    background = "transparent"
+    type = "executiontime"
+    style = "plain"
 
     [blocks.segments.properties]
-      cache_duration = 'none'
+      cache_duration = "none"
       threshold = 5000
 
+############################################################################
+##### Main prompt
+############################################################################
 [[blocks]]
-  type = 'prompt'
-  alignment = 'left'
+  type = "prompt"
+  alignment = "left"
   newline = true
 
   [[blocks.segments]]
-    template = ' '
-    background = 'transparent'
-    type = 'text'
-    style = 'plain'
-    foreground_templates = ['{{if gt .Code 0}}p:red{{end}}', '{{if eq .Code 0}}p:green{{end}}']
+    # template = " "
+    # \u001b[1m = bold on
+    # \u001b[22m = bold off
+    template = "\u001b[1m$\u001b[22m"
+    background = "transparent"
+    type = "text"
+    style = "plain"
+    foreground_templates = [
+      "{{if gt .Code 0}}p:red{{end}}",
+      "{{if eq .Code 0}}p:green{{end}}"
+    ]
 
     [blocks.segments.properties]
-      cache_duration = 'none'
+      cache_duration = "none"
