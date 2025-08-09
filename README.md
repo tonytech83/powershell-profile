@@ -1,20 +1,23 @@
 [![Install](https://github.com/tonytech83/powershell-profile/actions/workflows/main.yml/badge.svg)](https://github.com/tonytech83/powershell-profile/actions/workflows/main.yml)
-# PowerShell Profile
 
-![full](media/full.jpeg)
+<h1 align="center">
+PowerShell Profile
+</h1>
 
-Feels almost as good as a Linux terminal.
+**_Transform your Windows PowerShell into a powerful, beautiful, and productive terminal environment that rivals the best Linux shells. This comprehensive PowerShell profile brings together modern tools, elegant themes, and productivity-enhancing features to create a seamless command-line experience._**
+
+<img src="media/full.jpeg" alt="PowerShell Profile Showcase" width="100%">
 
 #### Themes:
 
 **_minimal.toml_**
-![minimal](media/minimal.jpeg)
+<img src="media/minimal.jpeg" alt="minimal theme" width="100%">
 
 **_minimal\_one.toml_**
-![minimal_one](media/minimal_one.jpeg)
+<img src="media/minimal_one.jpeg" alt="minimal_one theme" width="100%">
 
 **_tonytech.omp.json_**
-![tonytech.omp.json](media/tonytech.omp.jpeg)
+<img src="media/tonytech.omp.jpeg" alt="tonytech theme" width="100%">
 
 <hr>
 
