@@ -3,25 +3,25 @@ version = 3
 final_space = true
 
 [palette]
-black = "#2E3440"
-green = "#A3BE8C"
-white = "#D8DEE9"
-gray = "#84868b"
-blue = "#81A1C1"
-red = "#BF616A"
-yellow = "#EBCB8B"
-purple = "#B48EAD"
-orange = "#f7931a"
-darkblue = "#7292b2"
+  black = "#2E3440"
+  green = "#A3BE8C"
+  white = "#D8DEE9"
+  gray = "#84868b"
+  blue = "#81A1C1"
+  red = "#BF616A"
+  yellow = "#EBCB8B"
+  purple = "#B48EAD"
+  orange = "#f7931a"
+  darkblue = "#7292b2"
+  cyan-blue = "#06AAE3"
+  yellowgreen = "#9ACD32"
 
 [secondary_prompt]
-  # template = "❯ "
   template = ">> "
   foreground = "p:green"
   background = "transparent"
 
 [transient_prompt]
-  # template = " "
   template ="$ "
   background = "transparent"
   foreground_templates = [
@@ -38,13 +38,13 @@ darkblue = "#7292b2"
   ##### Python
   ############################################################################
   # If venv is active the icon is green else gray
-   [[blocks.segments]]
-      type = "python"
-      style = "plain"
-      template = " "
-      foreground = "p:gray"
-      background = "transparent"
-      foreground_templates = [ "{{ if .Venv }}p:green{{ end }}" ]
+  [[blocks.segments]]
+    type = "python"
+    style = "plain"
+    template = " "
+    foreground = "p:gray"
+    background = "transparent"
+    foreground_templates = [ "{{ if .Venv }}p:green{{ end }}" ]
 
     [blocks.segments.properties]
       display_mode = "files"
@@ -66,18 +66,18 @@ darkblue = "#7292b2"
       fetch_virtual_env = true
 
   [[blocks.segments]]
-  type = "text"
-  style = "plain"
-  template = "\u001b[1m at \u001b[22m"
-  foreground = "p:white"
-  background = "transparent"
+    type = "text"
+    style = "plain"
+    template = "\u001b[1m at \u001b[22m"
+    foreground = "p:white"
+    background = "transparent"
 
   [[blocks.segments]]
-  type = "session"
-  style = "plain"
-  template = "\u001b[1m{{ .HostName }}\u001b[22m"
-  foreground = "p:blue"
-  background = "transparent"
+    type = "session"
+    style = "plain"
+    template = "\u001b[1m{{ .HostName }}\u001b[22m"
+    foreground = "p:cyan-blue"
+    background = "transparent"
 
     [blocks.segments.properties]
       display_mode = "files"
@@ -97,7 +97,7 @@ darkblue = "#7292b2"
     type = "path"
     style = "powerline"
     template = "\u001b[1m{{ .Folder }}\u001b[22m"
-    foreground = "p:green"
+    foreground = "p:yellowgreen"
     background = "transparent"
 
     [blocks.segments.properties]
@@ -128,15 +128,15 @@ darkblue = "#7292b2"
   overflow = "hidden"
 
   [[blocks.segments]]
+    type = "executiontime"
+    style = "plain"
     template = "{{ .FormattedMs }}"
     foreground = "p:yellow"
     background = "transparent"
-    type = "executiontime"
-    style = "plain"
 
     [blocks.segments.properties]
       cache_duration = "none"
-      threshold = 5000
+      threshold = 1
 
 ############################################################################
 ##### Main prompt
@@ -147,17 +147,14 @@ darkblue = "#7292b2"
   newline = true
 
   [[blocks.segments]]
-    # template = " "
-    # \u001b[1m = bold on
-    # \u001b[22m = bold off
-    template = "\u001b[1m$\u001b[22m"
-    background = "transparent"
     type = "text"
     style = "plain"
+    template = "\u001b[1m$\u001b[22m"
     foreground_templates = [
       "{{if gt .Code 0}}p:red{{end}}",
       "{{if eq .Code 0}}p:green{{end}}"
     ]
+    background = "transparent"
 
     [blocks.segments.properties]
       cache_duration = "none"
