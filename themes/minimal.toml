@@ -110,7 +110,7 @@ darkblue = "#7292b2"
   [[blocks.segments]]
     type = "git"
     style = "powerline"
-    template = "  {{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{else }}≡{{ end }} <p:purple>{{ if gt .Behind 0 }}{{ end }}{{ if gt .Ahead 0 }}{{ end }}</>"
+    template = "\u001b[1m <p:white>on</>  <p:red>{{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{else }}≡{{ end }}</> <p:purple>{{ if gt .Behind 0 }}{{ end }}{{ if gt .Ahead 0 }}{{ end }}</>\u001b[22m"
     foreground = "p:red"
     background = "transparent"
 
