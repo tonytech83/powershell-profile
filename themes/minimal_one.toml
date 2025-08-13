@@ -107,10 +107,10 @@ darkblue = "#7292b2"
   newline = true
 
   [[blocks.segments]]
-    # template = ' '
-    # \u001b[1m = bold on
-    # \u001b[22m = bold off
-    template = "\u001b[1m$\u001b[22m"
+    template = ' '
+    # # \u001b[1m = bold on
+    # # \u001b[22m = bold off
+    # template = "\u001b[1m$\u001b[22m"
     background = 'transparent'
     type = 'text'
     style = 'plain'
