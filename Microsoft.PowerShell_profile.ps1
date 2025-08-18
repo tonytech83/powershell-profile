@@ -386,3 +386,6 @@ Import-Module -Name Terminal-Icons
       
 # Added `z` instead `cd`
 Invoke-Expression (& { (zoxide init powershell | Out-String) })
+
+# One empty line before first prompt
+Write-Host ""
