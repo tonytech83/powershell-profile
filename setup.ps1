@@ -1,4 +1,10 @@
-function Install-JetBrainsMonoNerdFont {
+# Ensure the script can run with elevated privileges
+if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+  Write-Warning "Please run this script as an Administrator!"
+  break
+}
+
+function Install-NerdFont {
   param (
     [string]$FontName = "JetBrainsMono",
     [string]$FontDisplayName = "JetBrainsMono NF",
@@ -80,7 +86,7 @@ function Install-WingetPackage {
   }
 }
 
-function installTerminalIcons {
+function Install-TerminalIcons {
   # Ensure TLS 1.2 (mostly for Windows PowerShell 5.1)
   [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
@@ -99,7 +105,7 @@ function installTerminalIcons {
   }
   
   try {
-    Install-Module -Name Terminal-Icons -Repository PSGallery
+    Install-Module -Name Terminal-Icons -Repository PSGallery -Force
     Write-Host "Terminal-Icons has been installed successfully."
   }
   catch {
@@ -114,7 +120,7 @@ Install-WingetPackage -Id "junegunn.fzf" -Name "fzf"
 Install-WingetPackage -Id "ajeetdsouza.zoxide" -Name "zoxide"
 
 # install Terminal-Icons
-installTerminalIcons
+Install-TerminalIcons
 
-# Install the font as part of full setup. Change the font here!
-Install-JetBrainsMonoNerdFont -FontName "JetBrainsMono" -FontDisplayName "JetBrainsMono NF"
+# Install Nerd Font. Change the font here!
+Install-NerdFont -FontName "JetBrainsMono" -FontDisplayName "JetBrainsMono NF"
