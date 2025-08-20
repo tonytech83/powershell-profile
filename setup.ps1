@@ -17,6 +17,8 @@ if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdent
   $psi.FileName = (Get-Process -Id $PID).Path
   $psi.Arguments = $argString
   $psi.Verb = 'runas'
+  # Important: Verb requires shell execute; otherwise elevation is ignored and causes a relaunch loop
+  $psi.UseShellExecute = $true
   try {
     [System.Diagnostics.Process]::Start($psi) | Out-Null
     exit
