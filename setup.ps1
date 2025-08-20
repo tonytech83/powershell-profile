@@ -113,9 +113,6 @@ Install-WingetPackage -Id "JanDeDobbeleer.OhMyPosh" -Name "OhMyPosh"
 Install-WingetPackage -Id "junegunn.fzf" -Name "fzf"
 Install-WingetPackage -Id "ajeetdsouza.zoxide" -Name "zoxide"
 
-# Install installOhMyPosh
-installOhMyPosh
-
 # install Terminal-Icons
 installTerminalIcons
 
