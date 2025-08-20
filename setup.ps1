@@ -1,45 +1,37 @@
 <#
-  Ensure the script runs with administrative privileges. If not elevated,
-  relaunches itself with UAC prompt so the user can enter admin credentials.
+  Setup script for PowerShell profile. Elevation is applied only to the font
+  installation step when needed.
 #>
 param(
-  [switch]$__Elevated
+  [switch]$InstallFontOnly,
+  [string]$FontName = "JetBrainsMono",
+  [string]$FontDisplayName = "JetBrainsMono NF",
+  [string]$Version = "3.2.1",
+  [switch]$AllUsers
 )
 
+# Determine elevation status
 $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
 $principal = New-Object Security.Principal.WindowsPrincipal $identity
 $isAdmin = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
-if (-not $isAdmin) {
-  if (-not $__Elevated) {
-    Write-Host "Re-launching with administrative privileges..." -ForegroundColor Yellow
+# If we're asked to install fonts for all users but we're not elevated,
+# relaunch only this script step elevated and exit the current process.
+if ($InstallFontOnly -and $AllUsers -and -not $isAdmin) {
+  $scriptPath = $PSCommandPath
+  if (-not $scriptPath) { $scriptPath = $MyInvocation.MyCommand.Definition }
+  $scriptPath = (Resolve-Path -LiteralPath $scriptPath).Path
+  $pwshPath = (Get-Process -Id $PID).Path
 
-    $scriptPath = $PSCommandPath
-    if (-not $scriptPath) { $scriptPath = $MyInvocation.MyCommand.Definition }
-    $scriptPath = (Resolve-Path -LiteralPath $scriptPath).Path
-
-    # Use the same pwsh binary as the current process
-    $pwshPath = (Get-Process -Id $PID).Path
-    $workingDir = (Get-Location).Path
-
-    # Preserve and quote incoming args
-    $escapedArgs = @()
-    foreach ($a in $args) { $escapedArgs += '"' + ($a -replace '"', '\"') + '"' }
-    $argString = ("-NoExit -NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`" -__Elevated " + ($escapedArgs -join ' ')).Trim()
-
-    try {
-      Start-Process -FilePath $pwshPath -WorkingDirectory $workingDir -Verb RunAs -ArgumentList $argString | Out-Null
-      exit
-    }
-    catch {
-      Write-Error "Admin elevation was cancelled or failed. $_"
-      exit 1
-    }
-  }
-  else {
-    Write-Error "Script is still not elevated after relaunch. Please run PowerShell as Administrator and re-run the script."
-    exit 1
-  }
+  $argList = @(
+    '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $scriptPath,
+    '-InstallFontOnly', '-AllUsers',
+    '-FontName', $FontName,
+    '-FontDisplayName', $FontDisplayName,
+    '-Version', $Version
+  )
+  Start-Process -FilePath $pwshPath -Verb RunAs -ArgumentList $argList | Out-Null
+  exit
 }
 
 function Install-JetBrainsMonoNerdFont {
@@ -62,9 +54,6 @@ function Install-JetBrainsMonoNerdFont {
     # Define the directory where the font files will be extracted
     $extractPath = "$env:TEMP\JetBrainsMono"
 
-    # Define the fonts installation path
-    $fontsPath = "$env:SystemRoot\Fonts"
-
     try {
       # Download the font zip file
       Invoke-WebRequest -Uri $fontUrl -OutFile $tempZipPath
@@ -83,11 +72,31 @@ function Install-JetBrainsMonoNerdFont {
       Expand-Archive -Path $tempZipPath -DestinationPath $extractPath -Force
 
       # Get the list of font files from the extracted directory
-      $fontFiles = Get-ChildItem -Path $extractPath -Filter "*.ttf"
+      $fontFiles = Get-ChildItem -Path $extractPath -Recurse -Filter "*.ttf"
 
-      # Copy the font files to the Fonts directory
-      foreach ($fontFile in $fontFiles) {
-        Copy-Item -Path $fontFile.FullName -Destination $fontsPath -Force
+      if (-not $fontFiles -or $fontFiles.Count -eq 0) {
+        throw "No .ttf files found in the downloaded archive"
+      }
+
+      # Determine elevation status
+      $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+      $principal = New-Object Security.Principal.WindowsPrincipal $identity
+      $isAdmin = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+
+      if ($isAdmin) {
+        # Install for all users (requires admin)
+        $fontsPath = "$env:SystemRoot\Fonts"
+        foreach ($fontFile in $fontFiles) {
+          Copy-Item -Path $fontFile.FullName -Destination $fontsPath -Force
+        }
+      }
+      else {
+        # Install per-user without elevation using Fonts shell folder
+        $shell = New-Object -ComObject Shell.Application
+        $fontsFolder = $shell.NameSpace(0x14) # CSIDL_FONTS
+        foreach ($fontFile in $fontFiles) {
+          $null = $fontsFolder.CopyHere($fontFile.FullName, 16)
+        }
       }
 
       # Clean up
@@ -121,10 +130,17 @@ function Install-WingetPackage {
   }
 }
 
+# If only the font installation is requested, do just that and exit
+if ($InstallFontOnly) {
+  Install-JetBrainsMonoNerdFont -FontName $FontName -FontDisplayName $FontDisplayName -Version $Version
+  return
+}
+
+# Full setup path
 # Replace individual try-catch blocks with helper function calls
 Install-WingetPackage -Id "JanDeDobbeleer.OhMyPosh" -Name "OhMyPosh"
 Install-WingetPackage -Id "junegunn.fzf" -Name "fzf"
 Install-WingetPackage -Id "ajeetdsouza.zoxide" -Name "zoxide"
 
-# Run the function to install the font
-Install-JetBrainsMonoNerdFont -FontName "JetBrainsMono" -FontDisplayName "JetBrainsMono NF"
+# Install the font as part of full setup
+Install-JetBrainsMonoNerdFont -FontName $FontName -FontDisplayName $FontDisplayName -Version $Version
