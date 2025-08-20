@@ -2,37 +2,37 @@
   Setup script for PowerShell profile. Elevation is applied only to the font
   installation step when needed.
 #>
-param(
-  [switch]$InstallFontOnly,
-  [string]$FontName = "JetBrainsMono",
-  [string]$FontDisplayName = "JetBrainsMono NF",
-  [string]$Version = "3.2.1",
-  [switch]$AllUsers
-)
+# param(
+#   [switch]$InstallFontOnly,
+#   [string]$FontName = "JetBrainsMono",
+#   [string]$FontDisplayName = "JetBrainsMono NF",
+#   [string]$Version = "3.2.1",
+#   [switch]$AllUsers
+# )
 
-# Determine elevation status
-$identity = [Security.Principal.WindowsIdentity]::GetCurrent()
-$principal = New-Object Security.Principal.WindowsPrincipal $identity
-$isAdmin = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+# # Determine elevation status
+# $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+# $principal = New-Object Security.Principal.WindowsPrincipal $identity
+# $isAdmin = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
-# If we're asked to install fonts for all users but we're not elevated,
-# relaunch only this script step elevated and exit the current process.
-if ($InstallFontOnly -and $AllUsers -and -not $isAdmin) {
-  $scriptPath = $PSCommandPath
-  if (-not $scriptPath) { $scriptPath = $MyInvocation.MyCommand.Definition }
-  $scriptPath = (Resolve-Path -LiteralPath $scriptPath).Path
-  $pwshPath = (Get-Process -Id $PID).Path
+# # If we're asked to install fonts for all users but we're not elevated,
+# # relaunch only this script step elevated and exit the current process.
+# if ($InstallFontOnly -and $AllUsers -and -not $isAdmin) {
+#   $scriptPath = $PSCommandPath
+#   if (-not $scriptPath) { $scriptPath = $MyInvocation.MyCommand.Definition }
+#   $scriptPath = (Resolve-Path -LiteralPath $scriptPath).Path
+#   $pwshPath = (Get-Process -Id $PID).Path
 
-  $argList = @(
-    '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $scriptPath,
-    '-InstallFontOnly', '-AllUsers',
-    '-FontName', $FontName,
-    '-FontDisplayName', $FontDisplayName,
-    '-Version', $Version
-  )
-  Start-Process -FilePath $pwshPath -Verb RunAs -ArgumentList $argList | Out-Null
-  exit
-}
+#   $argList = @(
+#     '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $scriptPath,
+#     '-InstallFontOnly', '-AllUsers',
+#     '-FontName', $FontName,
+#     '-FontDisplayName', $FontDisplayName,
+#     '-Version', $Version
+#   )
+#   Start-Process -FilePath $pwshPath -Verb RunAs -ArgumentList $argList | Out-Null
+#   exit
+# }
 
 function Install-JetBrainsMonoNerdFont {
   param (
@@ -130,17 +130,14 @@ function Install-WingetPackage {
   }
 }
 
-# If only the font installation is requested, do just that and exit
-if ($InstallFontOnly) {
-  Install-JetBrainsMonoNerdFont -FontName $FontName -FontDisplayName $FontDisplayName -Version $Version
-  return
-}
-
 # Full setup path
 # Replace individual try-catch blocks with helper function calls
 Install-WingetPackage -Id "JanDeDobbeleer.OhMyPosh" -Name "OhMyPosh"
 Install-WingetPackage -Id "junegunn.fzf" -Name "fzf"
 Install-WingetPackage -Id "ajeetdsouza.zoxide" -Name "zoxide"
+
+# install Terminal-Icons
+Install-Module -Name Terminal-Icons -Repository PSGallery
 
 # Install the font as part of full setup
 Install-JetBrainsMonoNerdFont -FontName $FontName -FontDisplayName $FontDisplayName -Version $Version
