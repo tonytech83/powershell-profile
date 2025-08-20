@@ -1,10 +1,9 @@
-function Install-JetBrainsMonoNerdFont {
-  param (
-    [string]$FontName = "JetBrainsMono",
-    [string]$FontDisplayName = "JetBrainsMono NF",
-    [string]$Version = "3.2.1"
-  )
+# Change font here 
+$FontName = "JetBrainsMono"
+$FontDisplayName = "JetBrainsMono NF"
+$Version = "3.2.1"
 
+function Install-JetBrainsMonoNerdFont {
   # Installed Font Families
   $fontFamilies = (New-Object System.Drawing.Text.InstalledFontCollection).Families.Name
 
@@ -97,18 +96,41 @@ function Install-WingetPackage {
 function installTerminalIcons {
   [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
-  Register-PSResourceRepository -PSGallery -Trusted
-
-  Install-Module -Name Terminal-Icons -Repository PSGallery
+  try {
+    Register-PSRepository -Default -ErrorAction Stop
+  }
+  catch {
+    if (-not (Get-PSRepository -ErrorAction SilentlyContinue)) {
+      Register-PSRepository -Name PSGallery `
+        -SourceLocation 'https://www.powershellgallery.com/api/v2' `
+        -ScriptSourceLocation 'https://www.powershellgallery.com/api/v2/script' `
+        -PublishLocation 'https://www.powershellgallery.com/api/v2/package/' `
+        -ScriptPublishLocation 'https://www.powershellgallery.com/api/v2/package/' `
+        -InstallationPolicy Trusted
+    }
+  }
+  
+  try {
+    Install-Module -Name Terminal-Icons -Repository PSGallery -Scope CurrentUser
+    Write-Host "Terminal-Icons has been installed successfully."
+  }
+  catch {
+    Write-Error "Failed to install Terminal-Icons. Error: $_"
+  }
+  
 }
 
 function installOhMyPosh {
-  winget install --id JanDeDobbeleer.OhMyPosh --source winget --scope User --accept-package-agreements --accept-source-agreements
+  try {
+    winget install --id JanDeDobbeleer.OhMyPosh --source winget --scope User --accept-package-agreements --accept-source-agreements
+    Write-Host "Oh-My-Posh has been installed successfully."
+  }
+  catch {
+    Write-Error "Failed to install Oh-My-Posh. Error: $_"
+  }
 }
 
-# Full setup path
-# Replace individual try-catch blocks with helper function calls
-# Install-WingetPackage -Id "JanDeDobbeleer.OhMyPosh" -Name "OhMyPosh"
+# Installation 
 Install-WingetPackage -Id "junegunn.fzf" -Name "fzf"
 Install-WingetPackage -Id "ajeetdsouza.zoxide" -Name "zoxide"
 
