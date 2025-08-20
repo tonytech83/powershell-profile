@@ -1,9 +1,13 @@
-# Change font here 
-$FontName = "JetBrainsMono"
-$FontDisplayName = "JetBrainsMono NF"
-$Version = "3.2.1"
-
 function Install-JetBrainsMonoNerdFont {
+  param (
+    [string]$FontName = "JetBrainsMono",
+    [string]$FontDisplayName = "JetBrainsMono NF",
+    [string]$Version = "3.2.1"
+  )
+
+  # Installed Font Families
+  $fontFamilies = (New-Object System.Drawing.Text.InstalledFontCollection).Families.Name
+
   # Installed Font Families
   $fontFamilies = (New-Object System.Drawing.Text.InstalledFontCollection).Families.Name
 
@@ -16,6 +20,9 @@ function Install-JetBrainsMonoNerdFont {
       
     # Define the directory where the font files will be extracted
     $extractPath = "$env:TEMP\JetBrainsMono"
+
+    # Define the fonts installation path
+    $fontsPath = "$env:SystemRoot\Fonts"
 
     try {
       # Download the font zip file
@@ -35,31 +42,11 @@ function Install-JetBrainsMonoNerdFont {
       Expand-Archive -Path $tempZipPath -DestinationPath $extractPath -Force
 
       # Get the list of font files from the extracted directory
-      $fontFiles = Get-ChildItem -Path $extractPath -Recurse -Filter "*.ttf"
+      $fontFiles = Get-ChildItem -Path $extractPath -Filter "*.ttf"
 
-      if (-not $fontFiles -or $fontFiles.Count -eq 0) {
-        throw "No .ttf files found in the downloaded archive"
-      }
-
-      # Determine elevation status
-      $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
-      $principal = New-Object Security.Principal.WindowsPrincipal $identity
-      $isAdmin = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-
-      if ($isAdmin) {
-        # Install for all users (requires admin)
-        $fontsPath = "$env:SystemRoot\Fonts"
-        foreach ($fontFile in $fontFiles) {
-          Copy-Item -Path $fontFile.FullName -Destination $fontsPath -Force
-        }
-      }
-      else {
-        # Install per-user without elevation using Fonts shell folder
-        $shell = New-Object -ComObject Shell.Application
-        $fontsFolder = $shell.NameSpace(0x14) # CSIDL_FONTS
-        foreach ($fontFile in $fontFiles) {
-          $null = $fontsFolder.CopyHere($fontFile.FullName, 16)
-        }
+      # Copy the font files to the Fonts directory
+      foreach ($fontFile in $fontFiles) {
+        Copy-Item -Path $fontFile.FullName -Destination $fontsPath -Force
       }
 
       # Clean up
@@ -94,6 +81,7 @@ function Install-WingetPackage {
 }
 
 function installTerminalIcons {
+  # Ensure TLS 1.2 (mostly for Windows PowerShell 5.1)
   [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
   try {
@@ -111,7 +99,7 @@ function installTerminalIcons {
   }
   
   try {
-    Install-Module -Name Terminal-Icons -Repository PSGallery -Scope CurrentUser
+    Install-Module -Name Terminal-Icons -Repository PSGallery
     Write-Host "Terminal-Icons has been installed successfully."
   }
   catch {
@@ -120,17 +108,8 @@ function installTerminalIcons {
   
 }
 
-function installOhMyPosh {
-  try {
-    winget install --id JanDeDobbeleer.OhMyPosh --source winget --scope User --accept-package-agreements --accept-source-agreements
-    Write-Host "Oh-My-Posh has been installed successfully."
-  }
-  catch {
-    Write-Error "Failed to install Oh-My-Posh. Error: $_"
-  }
-}
-
 # Installation 
+Install-WingetPackage -Id "JanDeDobbeleer.OhMyPosh" -Name "OhMyPosh"
 Install-WingetPackage -Id "junegunn.fzf" -Name "fzf"
 Install-WingetPackage -Id "ajeetdsouza.zoxide" -Name "zoxide"
 
@@ -140,5 +119,5 @@ installOhMyPosh
 # install Terminal-Icons
 installTerminalIcons
 
-# Install the font as part of full setup
-Install-JetBrainsMonoNerdFont -FontName $FontName -FontDisplayName $FontDisplayName -Version $Version
+# Install the font as part of full setup. Change the font here!
+Install-JetBrainsMonoNerdFont -FontName "JetBrainsMono" -FontDisplayName "JetBrainsMono NF"
