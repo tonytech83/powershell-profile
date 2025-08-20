@@ -1,3 +1,32 @@
+<#
+  Ensure the script runs with administrative privileges. If not elevated,
+  relaunches itself with UAC prompt so the user can enter admin credentials.
+#>
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+  Write-Host "Re-launching with administrative privileges..." -ForegroundColor Yellow
+
+  $scriptPath = $PSCommandPath
+  if (-not $scriptPath) { $scriptPath = $MyInvocation.MyCommand.Definition }
+
+  # Preserve any incoming args
+  $escapedArgs = @()
+  foreach ($a in $args) { $escapedArgs += '"' + ($a -replace '"', '\"') + '"' }
+  $argString = ("-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`" " + ($escapedArgs -join ' ')).Trim()
+
+  $psi = New-Object System.Diagnostics.ProcessStartInfo
+  $psi.FileName = (Get-Process -Id $PID).Path
+  $psi.Arguments = $argString
+  $psi.Verb = 'runas'
+  try {
+    [System.Diagnostics.Process]::Start($psi) | Out-Null
+    exit
+  }
+  catch {
+    Write-Error "Admin elevation was cancelled or failed. $_"
+    exit 1
+  }
+}
+
 function Install-JetBrainsMonoNerdFont {
   param (
     [string]$FontName = "JetBrainsMono",
@@ -64,16 +93,17 @@ function Install-JetBrainsMonoNerdFont {
 
 # Helper function to install apps via winget
 function Install-WingetPackage {
-    param (
-        [string]$Id,
-        [string]$Name
-    )
-    try {
-        winget install -e --accept-source-agreements --accept-package-agreements $Id
-        Write-Host "$Name has been installed successfully."
-    } catch {
-        Write-Error "Failed to install $Name. Error: $_"
-    }
+  param (
+    [string]$Id,
+    [string]$Name
+  )
+  try {
+    winget install -e --accept-source-agreements --accept-package-agreements $Id
+    Write-Host "$Name has been installed successfully."
+  }
+  catch {
+    Write-Error "Failed to install $Name. Error: $_"
+  }
 }
 
 # Replace individual try-catch blocks with helper function calls
