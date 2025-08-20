@@ -16,6 +16,7 @@ if (-not $isAdmin) {
 
     $scriptPath = $PSCommandPath
     if (-not $scriptPath) { $scriptPath = $MyInvocation.MyCommand.Definition }
+    $scriptPath = (Resolve-Path -LiteralPath $scriptPath).Path
 
     # Use the same pwsh binary as the current process
     $pwshPath = (Get-Process -Id $PID).Path
@@ -24,7 +25,7 @@ if (-not $isAdmin) {
     # Preserve and quote incoming args
     $escapedArgs = @()
     foreach ($a in $args) { $escapedArgs += '"' + ($a -replace '"', '\"') + '"' }
-    $argString = ("-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`" -__Elevated " + ($escapedArgs -join ' ')).Trim()
+    $argString = ("-NoExit -NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`" -__Elevated " + ($escapedArgs -join ' ')).Trim()
 
     try {
       Start-Process -FilePath $pwshPath -WorkingDirectory $workingDir -Verb RunAs -ArgumentList $argString | Out-Null
