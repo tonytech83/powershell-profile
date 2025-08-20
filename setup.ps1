@@ -2,29 +2,41 @@
   Ensure the script runs with administrative privileges. If not elevated,
   relaunches itself with UAC prompt so the user can enter admin credentials.
 #>
-if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-  Write-Host "Re-launching with administrative privileges..." -ForegroundColor Yellow
+param(
+  [switch]$__Elevated
+)
 
-  $scriptPath = $PSCommandPath
-  if (-not $scriptPath) { $scriptPath = $MyInvocation.MyCommand.Definition }
+$identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+$principal = New-Object Security.Principal.WindowsPrincipal $identity
+$isAdmin = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 
-  # Preserve any incoming args
-  $escapedArgs = @()
-  foreach ($a in $args) { $escapedArgs += '"' + ($a -replace '"', '\"') + '"' }
-  $argString = ("-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`" " + ($escapedArgs -join ' ')).Trim()
+if (-not $isAdmin) {
+  if (-not $__Elevated) {
+    Write-Host "Re-launching with administrative privileges..." -ForegroundColor Yellow
 
-  $psi = New-Object System.Diagnostics.ProcessStartInfo
-  $psi.FileName = (Get-Process -Id $PID).Path
-  $psi.Arguments = $argString
-  $psi.Verb = 'runas'
-  # Important: Verb requires shell execute; otherwise elevation is ignored and causes a relaunch loop
-  $psi.UseShellExecute = $true
-  try {
-    [System.Diagnostics.Process]::Start($psi) | Out-Null
-    exit
+    $scriptPath = $PSCommandPath
+    if (-not $scriptPath) { $scriptPath = $MyInvocation.MyCommand.Definition }
+
+    # Use the same pwsh binary as the current process
+    $pwshPath = (Get-Process -Id $PID).Path
+    $workingDir = (Get-Location).Path
+
+    # Preserve and quote incoming args
+    $escapedArgs = @()
+    foreach ($a in $args) { $escapedArgs += '"' + ($a -replace '"', '\"') + '"' }
+    $argString = ("-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`" -__Elevated " + ($escapedArgs -join ' ')).Trim()
+
+    try {
+      Start-Process -FilePath $pwshPath -WorkingDirectory $workingDir -Verb RunAs -ArgumentList $argString | Out-Null
+      exit
+    }
+    catch {
+      Write-Error "Admin elevation was cancelled or failed. $_"
+      exit 1
+    }
   }
-  catch {
-    Write-Error "Admin elevation was cancelled or failed. $_"
+  else {
+    Write-Error "Script is still not elevated after relaunch. Please run PowerShell as Administrator and re-run the script."
     exit 1
   }
 }
