@@ -285,7 +285,6 @@ function get-help {
         
   $maxCommandLength = ($commands.Keys | Measure-Object -Maximum Length).Maximum
   $leftPadding = 4
-  $rightPadding = 2
         
   Write-Host "`n$border`n"
   Write-Host "Available Commands:" -ForegroundColor Cyan
@@ -331,19 +330,20 @@ function reload-profile {
   & $profile
 }
 function find-file($name) {
-  ls -recurse -filter "*${name}*" -ErrorAction SilentlyContinue | foreach {
+  Get-ChildItem -recurse -filter "*${name}*" -ErrorAction SilentlyContinue | ForEach-Object {
     $place_path = $_.directory
-    echo "${place_path}\${_}"
+    Write-Output "${place_path}\${_}"
   }
 }
 function unzip ($file) {
-  echo("Extracting", $file, "to", $pwd)
+  Write-Output("Extracting", $file, "to", $pwd)
+  
   $fullFile = Get-ChildItem -Path $pwd -Filter .\cove.zip | ForEach-Object { $_.FullName }
   Expand-Archive -Path $fullFile -DestinationPath $pwd
 }
 function grep($regex, $dir) {
   if ( $dir ) {
-    ls $dir | select-string $regex
+    Get-ChildItem $dir | select-string $regex
     return
   }
   $input | select-string $regex
@@ -364,10 +364,10 @@ function export($name, $value) {
   set-item -force -path "env:$name" -value $value;
 }
 function pkill($name) {
-  ps $name -ErrorAction SilentlyContinue | kill
+  Get-Process $name -ErrorAction SilentlyContinue | Stop-Process
 }
 function pgrep($name) {
-  ps $name
+  Get-Process $name
 }
       
 # Enchanced PowerShell Expirience
