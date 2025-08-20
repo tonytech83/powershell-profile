@@ -8,6 +8,9 @@ function Install-JetBrainsMonoNerdFont {
   # Installed Font Families
   $fontFamilies = (New-Object System.Drawing.Text.InstalledFontCollection).Families.Name
 
+  # Installed Font Families
+  $fontFamilies = (New-Object System.Drawing.Text.InstalledFontCollection).Families.Name
+
   if ($fontFamilies -notcontains "${FontDisplayName}") {
     # Define the URL for the JetBrainsMono Nerd Font zip file
     $fontUrl = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${Version}/${FontName}.zip"
@@ -64,22 +67,54 @@ function Install-JetBrainsMonoNerdFont {
 
 # Helper function to install apps via winget
 function Install-WingetPackage {
-    param (
-        [string]$Id,
-        [string]$Name
-    )
-    try {
-        winget install -e --accept-source-agreements --accept-package-agreements $Id
-        Write-Host "$Name has been installed successfully."
-    } catch {
-        Write-Error "Failed to install $Name. Error: $_"
-    }
+  param (
+    [string]$Id,
+    [string]$Name
+  )
+  try {
+    winget install -e --accept-source-agreements --accept-package-agreements $Id
+    Write-Host "$Name has been installed successfully."
+  }
+  catch {
+    Write-Error "Failed to install $Name. Error: $_"
+  }
 }
 
-# Replace individual try-catch blocks with helper function calls
+function installTerminalIcons {
+  # Ensure TLS 1.2 (mostly for Windows PowerShell 5.1)
+  [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
+  try {
+    Register-PSRepository -Default -ErrorAction Stop
+  }
+  catch {
+    if (-not (Get-PSRepository -ErrorAction SilentlyContinue)) {
+      Register-PSRepository -Name PSGallery `
+        -SourceLocation 'https://www.powershellgallery.com/api/v2' `
+        -ScriptSourceLocation 'https://www.powershellgallery.com/api/v2/script' `
+        -PublishLocation 'https://www.powershellgallery.com/api/v2/package/' `
+        -ScriptPublishLocation 'https://www.powershellgallery.com/api/v2/package/' `
+        -InstallationPolicy Trusted
+    }
+  }
+  
+  try {
+    Install-Module -Name Terminal-Icons -Repository PSGallery
+    Write-Host "Terminal-Icons has been installed successfully."
+  }
+  catch {
+    Write-Error "Failed to install Terminal-Icons. Error: $_"
+  }
+  
+}
+
+# Installation 
 Install-WingetPackage -Id "JanDeDobbeleer.OhMyPosh" -Name "OhMyPosh"
 Install-WingetPackage -Id "junegunn.fzf" -Name "fzf"
 Install-WingetPackage -Id "ajeetdsouza.zoxide" -Name "zoxide"
 
-# Run the function to install the font
+# install Terminal-Icons
+installTerminalIcons
+
+# Install the font as part of full setup. Change the font here!
 Install-JetBrainsMonoNerdFont -FontName "JetBrainsMono" -FontDisplayName "JetBrainsMono NF"
