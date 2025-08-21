@@ -67,7 +67,7 @@ function Install-NerdFont {
   
 }
 
-Install-Profile {
+function Install-Profile {
   # Profile creation or update
   if (!(Test-Path -Path $PROFILE -PathType Leaf)) {
     try {
