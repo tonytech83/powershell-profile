@@ -24,10 +24,9 @@ function Install-Profile {
 
       Invoke-RestMethod https://github.com/tonytech83/powershell-profile/raw/main/Microsoft.PowerShell_profile.ps1 -OutFile $PROFILE
       Write-Host "The profile @ [$PROFILE] has been created."
-      Write-Host "If you want to make any personal changes or customizations, please do so at [$profilePath\Profile.ps1] as there is an updater in the installed profile which uses the hash to update the profile and will lead to loss of changes"
     }
     catch {
-      Write-Error "Failed to create or update the profile. Error: $_"
+      Write-Error "Failed to create the profile. Error: $_"
     }
   }
   else {
@@ -36,12 +35,11 @@ function Install-Profile {
       $backupPath = Join-Path (Split-Path $PROFILE) "oldprofile.ps1"
       Move-Item -Path $PROFILE -Destination $backupPath -Force
       Invoke-RestMethod https://github.com/tonytech83/powershell-profile/raw/main/Microsoft.PowerShell_profile.ps1 -OutFile $PROFILE
-      Write-Host "✅ PowerShell profile at [$PROFILE] has been updated."
-      Write-Host "📦 Your old profile has been backed up to [$backupPath]"
-      Write-Host "⚠️ NOTE: Please back up any persistent components of your old profile to [$HOME\Documents\PowerShell\Profile.ps1] as there is an updater in the installed profile which uses the hash to update the profile and will lead to loss of changes"
+      Write-Host "PowerShell profile at [$PROFILE] has been updated."
+      Write-Host "Your old profile has been backed up to [$backupPath]"
     }
     catch {
-      Write-Error "❌ Failed to backup and update the profile. Error: $_"
+      Write-Error "Failed to backup and update the profile. Error: $_"
     }
   }
 

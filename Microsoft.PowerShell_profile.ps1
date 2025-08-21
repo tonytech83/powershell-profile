@@ -378,8 +378,7 @@ Set-PSReadLineOption -Colors @{
 }
       
 ## Setup theme
-oh-my-posh init pwsh --config "C:\repos\powershell-profile\themes\minimal.toml" | Invoke-Expression
-# oh-my-posh init pwsh --config "$env:POSH_THEMES_PATH\jandedobbeleer.omp.json" | Invoke-Expression
+oh-my-posh init pwsh --config https://raw.githubusercontent.com/tonytech83/powershell-profile/refs/heads/main/themes/minimal.toml | Invoke-Expression
       
 # Add icons
 Import-Module -Name Terminal-Icons
