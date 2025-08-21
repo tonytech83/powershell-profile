@@ -4,6 +4,49 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
   break
 }
 
+function Install-Profile {
+  # Profile creation or update
+  if (!(Test-Path -Path $PROFILE -PathType Leaf)) {
+    try {
+      # Detect Version of PowerShell & Create Profile directories if they do not exist.
+      $profilePath = ""
+      if ($PSVersionTable.PSEdition -eq "Core") {
+        $profilePath = "$env:userprofile\Documents\Powershell"
+      }
+      elseif ($PSVersionTable.PSEdition -eq "Desktop") {
+        $profilePath = "$env:userprofile\Documents\WindowsPowerShell"
+      }
+
+      # Check if profilePath exists, if not create it
+      if (!(Test-Path -Path $profilePath)) {
+        New-Item -Path $profilePath -ItemType "directory"
+      }
+
+      Invoke-RestMethod https://github.com/tonytech83/powershell-profile/raw/main/Microsoft.PowerShell_profile.ps1 -OutFile $PROFILE
+      Write-Host "The profile @ [$PROFILE] has been created."
+      Write-Host "If you want to make any personal changes or customizations, please do so at [$profilePath\Profile.ps1] as there is an updater in the installed profile which uses the hash to update the profile and will lead to loss of changes"
+    }
+    catch {
+      Write-Error "Failed to create or update the profile. Error: $_"
+    }
+  }
+  else {
+    # PROFILE already exists
+    try {
+      $backupPath = Join-Path (Split-Path $PROFILE) "oldprofile.ps1"
+      Move-Item -Path $PROFILE -Destination $backupPath -Force
+      Invoke-RestMethod https://github.com/tonytech83/powershell-profile/raw/main/Microsoft.PowerShell_profile.ps1 -OutFile $PROFILE
+      Write-Host "✅ PowerShell profile at [$PROFILE] has been updated."
+      Write-Host "📦 Your old profile has been backed up to [$backupPath]"
+      Write-Host "⚠️ NOTE: Please back up any persistent components of your old profile to [$HOME\Documents\PowerShell\Profile.ps1] as there is an updater in the installed profile which uses the hash to update the profile and will lead to loss of changes"
+    }
+    catch {
+      Write-Error "❌ Failed to backup and update the profile. Error: $_"
+    }
+  }
+
+}
+
 function Install-NerdFont {
   param (
     [string]$FontName = "JetBrainsMono",
@@ -114,13 +157,14 @@ function Install-TerminalIcons {
   
 }
 
+# Install Nerd Font. Change the font here!
+Install-NerdFont -FontName "JetBrainsMono" -FontDisplayName "JetBrainsMono NF"
+
+# Install Profile
+Install-Profile
+
 # Installation 
 Install-WingetPackage -Id "JanDeDobbeleer.OhMyPosh" -Name "OhMyPosh"
 Install-WingetPackage -Id "junegunn.fzf" -Name "fzf"
 Install-WingetPackage -Id "ajeetdsouza.zoxide" -Name "zoxide"
-
-# install Terminal-Icons
 Install-TerminalIcons
-
-# Install Nerd Font. Change the font here!
-Install-NerdFont -FontName "JetBrainsMono" -FontDisplayName "JetBrainsMono NF"

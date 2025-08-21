@@ -24,30 +24,22 @@ PowerShell Profile
 ## Prerequisites
 
 - **Windows 10/11** with PowerShell 7+ installed
+- **Git** to clone the repository
 - **Administrator privileges** (required for setup script)
 
 ## Installation
 
-#### 1. Clone the repository
+#### Execute the following command in an elevated PowerShell window to install the PowerShell profile:
 
 ```powershell
-git clone https://github.com/tonytech83/powershell-profile.git
-cd powershell-profile
+irm "https://github.com/tonytech83/powershell-profile/raw/main/setup.ps1" | iex
 ```
-
-#### 2. Execute `setup.ps1` as **admin**. This will install:
 
 - JetBrainsMono Nerd Font
 - Oh My Posh
 - Terminal Icons module
 - fzf (fuzzy finder)
 - zoxide (smart cd command)
-
-#### 3. Execute `setprofile.ps1` to setup profile.
-
-```powershell
-.\setprofile.ps1
-```
 
 #### 4. If you want to use any of my themes:
 
