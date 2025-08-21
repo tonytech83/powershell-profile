@@ -17,8 +17,7 @@ function Install-NerdFont {
     Write-Host "Font '$FontDisplayName' already installed"
     return
   }
-
-
+  
   # Define the URL for the JetBrainsMono Nerd Font zip file
   $fontUrl = "https://github.com/ryanoasis/nerd-fonts/releases/download/v${Version}/${FontName}.zip"
   
@@ -51,7 +50,7 @@ function Install-NerdFont {
     foreach ($Font in $fontFiles) {
       # Copy to C:\Windows\Fonts
       Copy-Item $Font $fontsPath
-      New-ItemProperty -Name $Font.BaseName -Path "HKLM:\Software\Microsoft\Windows NT\CurrentVersion\Fonts" -PropertyType string -Value $Font.name
+      New-ItemProperty -Name $Font.BaseName -Path "HKLM:\Software\Microsoft\Windows NT\CurrentVersion\Fonts" -PropertyType String -Value $Font.Name -Force | Out-Null
     }
   
     # Clean up
@@ -64,7 +63,7 @@ function Install-NerdFont {
     Write-Error "Failed to install ${FontDisplayName}. Error: $_"
     return
   }
-  
+
 }
 
 function Install-Profile {
