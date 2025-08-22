@@ -4,6 +4,7 @@ if (-NOT ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdenti
   break
 }
 
+# install Nerd Font
 function Install-NerdFont {
   param (
     [string]$FontName = "JetBrainsMono",
@@ -66,6 +67,7 @@ function Install-NerdFont {
 
 }
 
+# Install PowerShell Profile
 function Install-Profile {
   # Profile creation or update
   if (!(Test-Path -Path $PROFILE -PathType Leaf)) {
@@ -119,6 +121,7 @@ function Install-WingetPackage {
   }
 }
 
+# Install Terminal-Icons
 function Install-TerminalIcons {
   # Ensure TLS 1.2 (mostly for Windows PowerShell 5.1)
   [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
@@ -147,6 +150,16 @@ function Install-TerminalIcons {
   
 }
 
+function Test-Setup {
+  $installedFonts = (New-Object System.Drawing.Text.InstalledFontCollection).Families.Name
+  if ((Test-Path -Path $PROFILE) -and (winget list --name "OhMyPosh" -e) -and ($installedFonts -contains "JetBrainsMono NF")) {
+    Write-Host "Setup completed successfully. Please restart your PowerShell session to apply changes."
+  }
+  else {
+    Write-Warning "Setup completed with errors. Please check the error messages above."
+  }
+}
+
 # Install Nerd Font. Change the font here!
 Install-NerdFont -FontName "JetBrainsMono" -FontDisplayName "JetBrainsMono NF"
 
@@ -158,3 +171,6 @@ Install-WingetPackage -Id "JanDeDobbeleer.OhMyPosh" -Name "OhMyPosh"
 Install-WingetPackage -Id "junegunn.fzf" -Name "fzf"
 Install-WingetPackage -Id "ajeetdsouza.zoxide" -Name "zoxide"
 Install-TerminalIcons
+
+# Final check and message to the user
+Test-Setup
