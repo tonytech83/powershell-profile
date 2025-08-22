@@ -152,12 +152,27 @@ function Install-TerminalIcons {
 
 function Test-Setup {
   $installedFonts = (New-Object System.Drawing.Text.InstalledFontCollection).Families.Name
-  if ((Test-Path -Path $PROFILE) -and (winget list --name "OhMyPosh" -e) -and ($installedFonts -contains "JetBrainsMono NF")) {
+  $fontOk = $installedFonts -contains "JetBrainsMono NF"
+  $profileOk = Test-Path -Path $PROFILE -PathType Leaf
+
+  # Call winget but suppress/ignore its exit code
+  $ompOk = $false
+  & {
+    $null = winget list --name "OhMyPosh" -e 2>$null
+    if ($LASTEXITCODE -eq 0) { $ompOk = $true }
+    # Reset inside the script block too, just to be safe
+    $global:LASTEXITCODE = 0
+  }
+
+  if ($fontOk -and $profileOk -and $ompOk) {
     Write-Host "Setup completed successfully. Please restart your PowerShell session to apply changes."
   }
   else {
-    Write-Warning "Setup completed with errors. Please check the error messages above."
+    Write-Warning "Setup completed with issues. (font:$fontOk, profile:$profileOk, omp:$ompOk)"
   }
+
+  # Belt & braces: ensure step exits 0
+  $global:LASTEXITCODE = 0
 }
 
 # Install Nerd Font. Change the font here!
