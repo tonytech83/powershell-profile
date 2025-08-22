@@ -37,6 +37,8 @@ $PSReadLineOptions = @{
   PredictionViewStyle           = 'ListView'
   BellStyle                     = 'None'
 }
+
+# Load ReadLine Options
 Set-PSReadLineOption @PSReadLineOptions
       
 # Find out if the current user identity is elevated (has admin rights)
@@ -386,13 +388,6 @@ function pkill($name) {
 }
 function pgrep($name) {
   Get-Process $name
-}
-      
-# Enchanced PowerShell Expirience
-Set-PSReadLineOption -Colors @{
-  Command   = 'Yellow'
-  Parameter = 'Green'
-  String    = 'DarkCyan'
 }
       
 ## Setup theme
