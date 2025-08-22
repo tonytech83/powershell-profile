@@ -80,7 +80,7 @@ function Install-Profile {
       }
 
       if (!(Test-Path -Path $profilePath)) {
-        New-Item -Path $profilePath -ItemType "directory"
+        New-Item -Path $profilePath -ItemType "directory" | Out-Null
       }
 
       Invoke-RestMethod https://raw.githubusercontent.com/tonytech83/powershell-profile/refs/heads/main/Microsoft.PowerShell_profile.ps1 -OutFile $PROFILE
