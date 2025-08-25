@@ -38,12 +38,13 @@ function Test-Prerequisites {
     $issues += "winget is not installed or not in PATH"
   }
   
-  # Check internet connectivity
-  try {
-    Invoke-WebRequest -Uri "https://www.google.com" -UseBasicParsing -TimeoutSec 5 | Out-Null
+  # Check internet connectivity (TCP 443 to common endpoints)
+  $internetOk = $false
+  if (Test-Connection -TargetName "bing.com" -TcpPort 443 -Count 1 -Quiet -ErrorAction Stop -WarningAction SilentlyContinue) {
+    $internetOk = $true
   }
-  catch {
-    $issues += "No internet connectivity detected"
+  if (-not $internetOk) {
+    $issues += "No reliable internet connectivity detected"
   }
   
   if ($issues.Count -gt 0) {
