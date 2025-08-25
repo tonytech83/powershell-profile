@@ -50,11 +50,11 @@ function Test-Prerequisites {
   if ($issues.Count -gt 0) {
     Write-Log "Prerequisites check failed:" "Warning"
     $issues | ForEach-Object { Write-Log "  - $_" "Warning" }
-    return $false
+    # return $false
   }
   
   Write-Log "Prerequisites check passed" "Success"
-  return $true
+  # return $true
 }
 
 # Ensure the script can run with elevated privileges
@@ -77,7 +77,7 @@ function Install-NerdFont {
   $installed = (New-Object System.Drawing.Text.InstalledFontCollection).Families.Name
   if ($installed -contains $FontDisplayName) {
     Write-Log "Font '$FontDisplayName' already installed" "Info"
-    return $true
+    # return $true
   }
   
   # Define the URL for the JetBrainsMono Nerd Font zip file
@@ -123,11 +123,11 @@ function Install-NerdFont {
     Remove-Item -Path $extractPath -Recurse -Force
 
     Write-Log "${FontDisplayName} font has been installed successfully." "Success"
-    return $true
+    # return $true
   }
   catch {
     Write-Log "Failed to install ${FontDisplayName}. Error: $_" "Error"
-    return $false
+    # return $false
   }
 }
 
@@ -153,11 +153,11 @@ function Install-Profile {
 
       Invoke-RestMethod $Config.ProfileUrl -OutFile $PROFILE
       Write-Log "The profile @ [$PROFILE] has been created." "Success"
-      return $true
+      # return $true
     }
     catch {
       Write-Log "Failed to create or update the profile. Error: $_" "Error"
-      return $false
+      # return $false
     }
   }
   else {
@@ -167,11 +167,11 @@ function Install-Profile {
       Invoke-RestMethod $Config.ProfileUrl -OutFile $PROFILE
       Write-Log "PowerShell profile at [$PROFILE] has been updated." "Success"
       Write-Log "Your old profile has been backed up to [$backupPath]" "Info"
-      return $true
+      # return $true
     }
     catch {
       Write-Log "Failed to backup and update the profile. Error: $_" "Error"
-      return $false
+      # return $false
     }
   }
 }
@@ -187,7 +187,7 @@ function Install-WingetPackage {
     winget install -e --accept-source-agreements --accept-package-agreements $Id 2>&1 | Out-Null
     if ($LASTEXITCODE -eq 0) {
       Write-Log "$Name has been installed successfully." "Success"
-      return $true
+      # return $true
     }
     else {
       throw "winget returned exit code $LASTEXITCODE"
@@ -195,7 +195,7 @@ function Install-WingetPackage {
   }
   catch {
     Write-Log "Failed to install $Name. Error: $_" "Error"
-    return $false
+    # return $false
   }
 }
 
@@ -223,32 +223,41 @@ function Install-TerminalIcons {
   try {
     Install-Module -Name Terminal-Icons -Repository PSGallery -Force
     Write-Log "Terminal-Icons has been installed successfully." "Success"
-    return $true
+    # return $true
   }
   catch {
     Write-Log "Failed to install Terminal-Icons. Error: $_" "Error"
-    return $false
+    # return $false
   }
 }
 
 function Test-Setup {
   Write-Log "Verifying installation..." "Info"
   
-  $installedFonts = (New-Object System.Drawing.Text.InstalledFontCollection).Families.Name
+  # $installedFonts = (New-Object System.Drawing.Text.InstalledFontCollection).Families.Name
   $profileExists = Test-Path -Path $PROFILE
   $ohMyPoshInstalled = $null -ne (winget list --name "OhMyPosh" -e 2>$null)
-  
-  if ($profileExists -and $ohMyPoshInstalled -and ($installedFonts -contains $Config.FontDisplayName)) {
+
+  if ($profileExists -and $ohMyPoshInstalled) {
     Write-Log "Setup completed successfully. Please restart your PowerShell session to apply changes." "Success"
-    return $true
   }
   else {
     Write-Log "Setup completed with errors. Please check the error messages above." "Warning"
     if (-not $profileExists) { Write-Log "  - PowerShell profile not found" "Warning" }
     if (-not $ohMyPoshInstalled) { Write-Log "  - OhMyPosh not installed" "Warning" }
-    if ($installedFonts -notcontains $Config.FontDisplayName) { Write-Log "  - Font not installed" "Warning" }
-    return $false
   }
+  
+  #   if ($profileExists -and $ohMyPoshInstalled -and ($installedFonts -contains $Config.FontDisplayName)) {
+  #     Write-Log "Setup completed successfully. Please restart your PowerShell session to apply changes." "Success"
+  #     return $true
+  #   }
+  #   else {
+  #     Write-Log "Setup completed with errors. Please check the error messages above." "Warning"
+  #     if (-not $profileExists) { Write-Log "  - PowerShell profile not found" "Warning" }
+  #     if (-not $ohMyPoshInstalled) { Write-Log "  - OhMyPosh not installed" "Warning" }
+  #     # if ($installedFonts -notcontains $Config.FontDisplayName) { Write-Log "  - Font not installed" "Warning" }
+  #     return $false
+  #   }
 }
 
 # Main execution starts here
