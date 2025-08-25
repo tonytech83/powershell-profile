@@ -50,9 +50,11 @@ function Test-Prerequisites {
   if ($issues.Count -gt 0) {
     Write-Log "Prerequisites check failed:" "Warning"
     $issues | ForEach-Object { Write-Log "  - $_" "Warning" }
+    return $false
   }
   
   Write-Log "Prerequisites check passed" "Success"
+  return $true
 }
 
 # Ensure the script can run with elevated privileges
@@ -74,7 +76,8 @@ function Install-NerdFont {
   # Installed Font Families
   $installed = (New-Object System.Drawing.Text.InstalledFontCollection).Families.Name
   if ($installed -contains $FontDisplayName) {
-    Write-Log "Font '$FontDisplayName' already installed" "Info"
+    Write-Log "Font '$FontDisplayName' already installed" "Success"
+    return 0
   }
   
   # Define the URL for the JetBrainsMono Nerd Font zip file
@@ -180,6 +183,9 @@ function Install-WingetPackage {
     winget install -e --accept-source-agreements --accept-package-agreements $Id 2>&1 | Out-Null
     if ($LASTEXITCODE -eq 0) {
       Write-Log "$Name has been installed successfully." "Success"
+    }
+    elseif ($LASTEXITCODE -eq -1978335189) {
+      Write-Log "$Name already installed." "Success"
     }
     else {
       throw "winget returned exit code $LASTEXITCODE"
