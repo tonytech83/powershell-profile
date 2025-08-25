@@ -6,6 +6,12 @@ PowerShell Profile
 
 **_Transform your Windows PowerShell into a powerful, beautiful, and productive terminal environment that rivals the best Linux shells. This comprehensive PowerShell profile brings together modern tools, elegant themes, and productivity-enhancing features to create a seamless command-line experience._**
 
+- JetBrainsMono Nerd Font
+- Oh My Posh
+- Terminal Icons module
+- fzf (fuzzy finder)
+- zoxide (smart cd command)
+
 <img src="media/full.png" alt="PowerShell Profile Showcase" width="100%">
 
 #### Themes:
@@ -21,47 +27,38 @@ PowerShell Profile
 
 <hr>
 
-## Prerequisites
+### Prerequisites
 
 - **Windows 10/11** with PowerShell 7+ installed
-- **Git** to clone the repository
 - **Administrator privileges** (required for setup script)
 
-## Installation
+---
+
+### Installation
 
 #### Execute the following command in an elevated PowerShell window to install the PowerShell profile:
+
+#### Stable Branch (Recommended)
 
 ```powershell
 irm "https://github.com/tonytech83/powershell-profile/raw/main/setup.ps1" | iex
 ```
 
-- JetBrainsMono Nerd Font
-- Oh My Posh
-- Terminal Icons module
-- fzf (fuzzy finder)
-- zoxide (smart cd command)
-
-#### 4. If you want to use any of my themes:
+#### Dev Branch
 
 ```powershell
-# Copy theme file to Oh My Posh themes directory
-Copy-Item "themes\<theme-name>" "$env:POSH_THEMES_PATH\"
-
-# Example for minimal theme:
-Copy-Item "themes\minimal.toml" "$env:POSH_THEMES_PATH\"
+irm "https://raw.githubusercontent.com/tonytech83/powershell-profile/refs/heads/dev/setup.ps1" | iex
 ```
 
-#### 5. **Important**: Restart your PowerShell terminal to apply all changes.
+#### **Important**: Restart your PowerShell terminal to apply all changes.
 
-## Troubleshooting
+---
 
 ### Common Issues
 
 **Theme not loading:**
 
 - Ensure you've restarted PowerShell after installation
-- Check that the theme file exists in `$env:POSH_THEMES_PATH`
-- Verify the theme name in your profile matches the copied file
 
 **Setup script fails:**
 
