@@ -387,19 +387,18 @@ function pkill($name) {
 function pgrep($name) {
   Get-Process $name
 }
-      
-# Enchanced PowerShell Expirience
-Set-PSReadLineOption -Colors @{
-  Command   = 'Yellow'
-  Parameter = 'Green'
-  String    = 'DarkCyan'
-}
-      
+    
 ## Setup theme
 oh-my-posh init pwsh --config https://raw.githubusercontent.com/tonytech83/powershell-profile/refs/heads/main/themes/minimal.toml | Invoke-Expression
       
 # Add icons
-Import-Module -Name Terminal-Icons
+try {
+  Import-Module -Name Terminal-Icons
+}
+catch {
+  Write-Output "Your PowerShell is up to date." -ForegroundColor Red
+}
+
       
 # Added `z` instead `cd`
 Invoke-Expression (& { (zoxide init powershell | Out-String) })
