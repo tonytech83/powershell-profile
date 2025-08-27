@@ -392,13 +392,11 @@ function pgrep($name) {
 oh-my-posh init pwsh --config https://raw.githubusercontent.com/tonytech83/powershell-profile/refs/heads/main/themes/minimal.toml | Invoke-Expression
       
 # Add icons
-try {
-  Import-Module -Name Terminal-Icons
+if (Import-Module -Name Terminal-Icons 2>&1 | Out-Null) {
 }
-catch {
-  Write-Output "Your PowerShell is up to date." -ForegroundColor Red
+else {
+  Write-Host "Can not load Terminal-Icons. Try install package manually." -ForegroundColor Red
 }
-
       
 # Added `z` instead `cd`
 Invoke-Expression (& { (zoxide init powershell | Out-String) })
