@@ -57,7 +57,7 @@ final_space = true
   [[blocks.segments]]
     type = "session"
     style = "plain"
-    template = "\u001b[1m{{ .UserName }}\u001b[22m"
+    template = "<b>{{ .UserName }}</b>"
     foreground = "p:orange"
     background = "transparent"
 
@@ -68,14 +68,14 @@ final_space = true
   [[blocks.segments]]
     type = "text"
     style = "plain"
-    template = "\u001b[1m at \u001b[22m"
+    template = "<b> at </b>"
     foreground = "p:white"
     background = "transparent"
 
   [[blocks.segments]]
     type = "session"
     style = "plain"
-    template = "\u001b[1m{{ .HostName }}\u001b[22m"
+    template = "<b>{{ .HostName }}</b>"
     foreground = "p:cyan-blue"
     background = "transparent"
 
@@ -86,7 +86,7 @@ final_space = true
   [[blocks.segments]]
     type = "text"
     style = "plain"
-    template = "\u001b[1m in \u001b[22m"
+    template = "<b> in </b>"
     foreground = "p:white"
     background = "transparent"
 
@@ -96,7 +96,7 @@ final_space = true
   [[blocks.segments]]
     type = "path"
     style = "powerline"
-    template = "\u001b[1m{{ .Folder }}\u001b[22m"
+    template = "<b>{{ .Folder }}</b>"
     foreground = "p:yellowgreen"
     background = "transparent"
 
@@ -110,7 +110,7 @@ final_space = true
   [[blocks.segments]]
     type = "git"
     style = "powerline"
-    template = "\u001b[1m <p:white>on</>  <p:red>{{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{else }}≡{{ end }}</> <p:purple>{{ if gt .Behind 0 }}{{ end }}{{ if gt .Ahead 0 }}{{ end }}</>\u001b[22m"
+    template = "<b> <p:white>on</>  <p:red>{{ .HEAD }}{{ if or (.Working.Changed) (.Staging.Changed) }}*{{else }}≡{{ end }}</> <p:purple>{{ if gt .Behind 0 }}{{ end }}{{ if gt .Ahead 0 }}{{ end }}</></b>"
     foreground = "p:red"
     background = "transparent"
 
