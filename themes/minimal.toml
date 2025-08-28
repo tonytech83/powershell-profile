@@ -149,7 +149,7 @@ final_space = true
   [[blocks.segments]]
     type = "text"
     style = "plain"
-    template = "\u001b[1m$\u001b[22m"
+    template = "<b>$</b>"
     foreground_templates = [
       "{{if gt .Code 0}}p:red{{end}}",
       "{{if eq .Code 0}}p:white{{end}}"
