@@ -162,13 +162,7 @@ function admin {
     Start-Process "C:\Program Files\PowerShell\7\pwsh.exe" -Verb runAs
   }
 }
-      
-# Set UNIX-like aliases for the admin command, so sudo <command> will run the command
-# with elevated rights. 
-Set-Alias -Name su -Value admin
-Set-Alias -Name sudo -Value admin
-Set-Alias -Name clr -Value clear
-      
+     
 # Make it easy to edit this profile once it's installed
 function Edit-Profile {
   if ($host.Name -match "ise") {
@@ -277,9 +271,7 @@ function myip {
     Write-Host "No network adapter configuration found." -ForegroundColor Yellow
   }
 }
-      
-      
-      
+  
 function get-help {
   $border = [string]::new([char]0x2501, 120)
   $commands = @{
@@ -324,8 +316,6 @@ Write-Host "Use `e[38;2;247;147;26m$([char]27)[1mget-help$([char]27)[0m`e[0m to 
       
 function ll { Get-ChildItem -Path $pwd -File }
       
-# Not in use
-# function g { cd $HOME\Documents\Github }
 function gcom {
   git add .
   git commit -m "$args"
@@ -387,6 +377,36 @@ function pkill($name) {
 function pgrep($name) {
   Get-Process $name
 }
+
+# Custom ping with colors
+function pingc {
+  [CmdletBinding()]
+  param(
+    [Parameter(ValueFromRemainingArguments = $true)]
+    [object[]]$Rest
+  )
+
+  $exe = Join-Path $env:SystemRoot 'System32\PING.EXE'
+  $argsToPass = @($Rest)
+
+  & $exe @argsToPass 2>&1 | ForEach-Object {
+    $line = $_
+    # highlight (note the backticked `$0`/`$1`)
+    $line = $line -replace 'Request timed out\.', "`e[31m`$0`e[0m"
+    $line = $line -replace 'Destination host unreachable\.', "`e[31m`$0`e[0m"
+    $line = $line -replace '\bTTL=\d+\b', "`e[36m`$0`e[0m"
+    $line = $line -replace 'time[=<]\d+ms', "`e[32m`$0`e[0m"
+    $line = $line -replace '((\d{1,3}\.){3}\d{1,3})', "`e[33m`$1`e[0m"
+    [Console]::WriteLine($line)
+  }
+}
+
+# Set UNIX-like aliases for the admin command, so sudo <command> will run the command
+# with elevated rights. 
+Set-Alias -Name su -Value admin
+Set-Alias -Name sudo -Value admin
+Set-Alias -Name clr -Value clear
+Set-Alias ping pingc
     
 ## Setup theme
 oh-my-posh init pwsh --config https://raw.githubusercontent.com/tonytech83/powershell-profile/refs/heads/main/themes/minimal.toml | Invoke-Expression
