@@ -178,7 +178,7 @@ function Edit-Profile {
 Remove-Variable identity
 Remove-Variable principal
       
-# Quick shortcut to start Remoute Desktop Connection Manager
+# Quick shortcut to start Remote Desktop Connection Manager
 function rdcman {
   C:\Tools\RDCMan\RDCMan.exe       
 }
@@ -330,8 +330,8 @@ function uptime {
   $bootuptime = (Get-CimInstance -ClassName Win32_OperatingSystem).LastBootUpTime
   $uptime = $CurrentDate - $bootuptime
   Write-Host
-  Write-Host "Meanmachine uptime:" -ForegroundColor DarkCyan
-  Write-Host $($uptime.days)"days" $($uptime.Hours)"hours" $($uptime.Minutes)"minutes"
+  Write-Host "$(hostname) uptime:" -ForegroundColor DarkCyan
+  Write-Host " "$($uptime.days)"days" $($uptime.Hours)"hours" $($uptime.Minutes)"minutes"
   Write-Host
 }
 function reload-profile {
