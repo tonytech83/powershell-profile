@@ -95,14 +95,15 @@ final_space = true
   ############################################################################
   [[blocks.segments]]
     type = "path"
-    style = "powerline"
-    template = "<b>{{ .Folder }}</b>"
+    style = "plain"
+    # template = "<b>{{ .Folder }}</b>"
+    template = "<b>{{ .Path }}</b>"
     foreground = "p:yellowgreen"
     background = "transparent"
 
     [blocks.segments.properties]
       cache_duration = "none"
-      style = "full"
+      style = "mixed"
 
   ############################################################################
   ##### Git
