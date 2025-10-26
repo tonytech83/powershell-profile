@@ -96,8 +96,8 @@ final_space = true
   [[blocks.segments]]
     type = "path"
     style = "plain"
-    # template = "<b>{{ .Folder }}</b>"
-    template = "<b>{{ .Path }}</b>"
+    template = "<b>{{ .Folder }}</b>"
+    # template = "<b>{{ .Path }}</b>"
     foreground = "p:yellowgreen"
     background = "transparent"
 
