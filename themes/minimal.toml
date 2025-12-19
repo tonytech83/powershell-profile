@@ -80,6 +80,7 @@ final_space = true
 ##### OS icon
 ############################################################################
 
+<<<<<<< HEAD
 [[blocks.segments]]
   type = "os"
   style = "plain"
@@ -90,6 +91,21 @@ final_space = true
   [blocks.segments.properties]
     display_mode = "files"
     fetch_virtual_env = true
+=======
+  ############################################################################
+  ##### Path
+  ############################################################################
+  [[blocks.segments]]
+    type = "path"
+    style = "plain"
+    template = "<b>{{ .Path }}</b>"
+    foreground = "p:yellowgreen"
+    background = "transparent"
+
+    [blocks.segments.properties]
+      cache_duration = "none"
+      style = "folder"
+>>>>>>> cabcfe48bad39813953db67a088a239ec841c3bf
 
 ############################################################################
 ##### Hostname

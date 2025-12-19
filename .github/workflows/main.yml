@@ -13,8 +13,8 @@ jobs:
       - name: Checkout the repo
         uses: actions/checkout@v4
 
-      - name: Install winget
-        uses: Cyberboss/install-winget@v1
+      - name: Check winget version
+        run: winget --version
 
       - name: Install dependencies
         shell: pwsh
